@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Solar Energy - Undang Teman</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    :root {
+      --solar-orange: #FF9500;
+      --solar-yellow: #FFCC00;
+      --solar-blue: #5AC8FA;
+      --solar-green: #34C759;
+      --solar-red: #FF3B30;
+      --bg: #000000;
+      --card: rgba(255, 255, 255, 0.1);
+      --card-light: rgba(255, 255, 255, 0.15);
+      --text: #FFFFFF;
+      --text-muted: #8E8E93;
+      --border: rgba(255, 255, 255, 0.2);
+      --gradient-solar: linear-gradient(135deg, #FF9500, #FFCC00);
+      --gradient-solar-dark: linear-gradient(135deg, #E68500, #E6B800);
+      --gradient-blue: linear-gradient(135deg, #5AC8FA, #007AFF);
+      --gradient-green: linear-gradient(135deg, #34C759, #32D74B);
+      --gradient-dark: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+      --shadow-glow: 0 10px 30px rgba(255, 149, 0, 0.3);
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%);
+      filter: blur(40px);
+      animation: float 20s infinite linear;
+    }
+    
+    .bg-circle:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      left: 5%;
+      background: radial-gradient(circle, rgba(255, 149, 0, 0.1) 0%, rgba(255, 149, 0, 0) 70%);
+      animation-delay: 0s;
+    }
+    
+    .bg-circle:nth-child(2) {
+      width: 400px;
+      height: 400px;
+      top: 60%;
+      left: 80%;
+      background: radial-gradient(circle, rgba(255, 204, 0, 0.1) 0%, rgba(255, 204, 0, 0) 70%);
+      animation-delay: -5s;
+    }
+    
+    .bg-circle:nth-child(3) {
+      width: 250px;
+      height: 250px;
+      top: 30%;
+      left: 70%;
+      background: radial-gradient(circle, rgba(90, 200, 250, 0.1) 0%, rgba(90, 200, 250, 0) 70%);
+      animation-delay: -10s;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(20px, 20px) rotate(90deg);
+      }
+      50% {
+        transform: translate(0, 40px) rotate(180deg);
+      }
+      75% {
+        transform: translate(-20px, 20px) rotate(270deg);
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg);
+      }
+    }
+    
+    header {
+      background: var(--gradient-dark);
+      padding: 20px 16px 30px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: var(--gradient-solar);
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.15;
+      z-index: 0;
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .back-button {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .back-button:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateX(-3px);
+    }
+    
+    .header-text {
+      flex: 1;
+    }
+    
+    .header-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #FFFFFF, #E8E8E8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .header-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    
+    main {
+      padding: 20px 16px;
+      max-width: 1000px;
+      margin: auto;
+      /* PERBAIKAN: Padding bottom dikurangi karena tidak ada navigasi bawah */
+      padding-bottom: 40px;
+    }
+    
+    /* Card Styles */
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-solar);
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .card-title i {
+      color: var(--solar-orange);
+    }
+    
+    /* Referral Section */
+    .referral-code {
+      background: rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 16px;
+      margin: 16px 0;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      border: 2px dashed rgba(255,255,255,0.3);
+      position: relative;
+      z-index: 1;
+      font-family: 'Courier New', monospace;
+      word-break: break-all;
+      overflow-wrap: break-word;
+      text-align: center;
+    }
+    
+    .referral-link-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    
+    .referral-link {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 14px;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .copy-btn {
+      background: var(--gradient-solar);
+      border: none;
+      border-radius: 12px;
+      padding: 14px 20px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .copy-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .copy-btn.copied {
+      background: var(--gradient-green);
+    }
+    
+    .share-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    
+    .share-btn {
+      padding: 12px 16px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .share-whatsapp {
+      background: #25D366;
+      color: white;
+    }
+    
+    .share-telegram {
+      background: #0088CC;
+      color: white;
+    }
+    
+    .share-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    /* PERBAIKAN: Stats Section dengan ikon yang ditingkatkan */
+    .stats-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .stat-card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-glow);
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--gradient-solar);
+    }
+    
+    .stat-card:nth-child(2)::before {
+      background: var(--gradient-blue);
+    }
+    
+    .stat-card:nth-child(3)::before {
+      background: var(--gradient-green);
+    }
+    
+    .stat-card:nth-child(4)::before {
+      background: var(--gradient-solar);
+    }
+    
+    /* PERBAIKAN: Ikon statistik yang lebih menarik */
+    .stat-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover .stat-icon {
+      transform: scale(1.1);
+    }
+    
+    .stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+    
+    .stat-card .stat-value {
+      background: var(--gradient-solar);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-card:nth-child(2) .stat-value {
+      background: var(--gradient-blue);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-card:nth-child(3) .stat-value {
+      background: var(--gradient-green);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-card:nth-child(4) .stat-value {
+      background: var(--gradient-solar);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    /* Section Title */
+    .section-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.5px;
+    }
+    
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 20px;
+      background: var(--gradient-solar);
+      border-radius: 2px;
+    }
+    
+    /* Commission Structure */
+    .commission-structure {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .commission-structure::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-solar);
+    }
+    
+    .commission-level {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .commission-level:last-child {
+      border-bottom: none;
+    }
+    
+    .level-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .level-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      box-shadow: var(--shadow-glow);
+    }
+    
+    .level-1 .level-badge {
+      background: var(--gradient-solar);
+    }
+    
+    .level-2 .level-badge {
+      background: var(--gradient-blue);
+    }
+    
+    .level-3 .level-badge {
+      background: var(--gradient-green);
+    }
+    
+    .level-details h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+    
+    .level-details p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    
+    .commission-amount {
+      text-align: right;
+    }
+    
+    .commission-percent {
+      font-size: 24px;
+      font-weight: 800;
+      background: var(--gradient-solar);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.3px;
+    }
+    
+    .level-2 .commission-percent {
+      background: var(--gradient-blue);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .level-3 .commission-percent {
+      background: var(--gradient-green);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .commission-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    
+    /* Motivasi Section */
+    .motivation-section {
+      margin-top: 20px;
+    }
+    
+    .motivation-card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    
+    .motivation-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-solar);
+    }
+    
+    .motivation-icon {
+      font-size: 56px;
+      margin-bottom: 20px;
+      color: var(--solar-orange);
+    }
+    
+    .motivation-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      background: var(--gradient-solar);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .motivation-text {
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    
+    .motivation-tips {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    
+    @media (min-width: 768px) {
+      .motivation-tips {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    .tip-item {
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: left;
+      border-left: 4px solid var(--solar-orange);
+      transition: all 0.3s ease;
+    }
+    
+    .tip-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+    
+    .tip-item:nth-child(2) {
+      border-left-color: var(--solar-blue);
+    }
+    
+    .tip-item:nth-child(3) {
+      border-left-color: var(--solar-green);
+    }
+    
+    .tip-item:nth-child(4) {
+      border-left-color: var(--solar-yellow);
+    }
+    
+    .tip-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    
+    .tip-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+    
+    .modal-content {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 32px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: var(--shadow-glow);
+      animation: modalAppear 0.4s ease;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .modal-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-solar);
+    }
+    
+    @keyframes modalAppear {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    
+    .modal-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      color: var(--solar-orange);
+    }
+    
+    .modal-title {
+      font-size: 24px;
+      margin-bottom: 12px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    
+    .modal-message {
+      margin-bottom: 24px;
+      color: var(--text-muted);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    
+    .modal-button {
+      background: var(--gradient-solar);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 32px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .modal-button:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+    
+    /* Loading states */
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 8px;
+    }
+    
+    @keyframes loading {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .stats-container {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .commission-level {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      
+      .commission-amount {
+        text-align: left;
+        width: 100%;
+      }
+      
+      .share-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .stat-card {
+        padding: 16px;
+        min-height: 90px;
+      }
+      
+      .stat-value {
+        font-size: 18px;
+      }
+      
+      .referral-code {
+        font-size: 20px;
+        letter-spacing: 2px;
+      }
+      
+      .commission-level {
+        padding: 16px 0;
+      }
+      
+      .level-info {
+        gap: 12px;
+      }
+      
+      .level-badge {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+      }
+    }
+    
+    @media (max-width: 340px) {
+      .stat-card .value {
+        font-size: 16px;
+      }
+      
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .referral-code {
+        font-size: 18px;
+        letter-spacing: 1px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation">
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+  </div>
+
+  <header>
+    <div class="header-content">
+      <button class="back-button" onclick="goPage('dashboard.html')">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1 class="header-title">Undang Teman</h1>
+        <p class="header-subtitle">Dapatkan komisi dengan mengundang teman</p>
+      </div>
+    </div>
+  </header>
+  
+  <main>
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-link"></i>
+        <span>Tautan Referral Anda</span>
+      </div>
+      <p style="color: var(--text-muted); margin-bottom: 16px; font-size: 14px;">
+        Bagikan tautan ini kepada teman-teman Anda untuk mendapatkan bonus referral
+      </p>
+      
+      <div class="referral-code" id="referralCode">LOADING</div>
+      
+      <div class="referral-link-container">
+        <input type="text" class="referral-link" id="referralLink" readonly value="Memuat tautan...">
+        <button class="copy-btn" id="copyBtn">
+          <i class="fas fa-copy"></i>
+          Salin
+        </button>
+      </div>
+      <div class="share-buttons">
+        <button class="share-btn share-whatsapp" onclick="shareToWhatsApp()">
+          <i class="fab fa-whatsapp"></i>
+          WhatsApp
+        </button>
+        <button class="share-btn share-telegram" onclick="shareToTelegram()">
+          <i class="fab fa-telegram"></i>
+          Telegram
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-chart-line"></i>
+        <span>Statistik Referral Anda</span>
+      </div>
+      <div class="stats-container">
+        <!-- PERBAIKAN: Statistik dengan ikon yang lebih menarik -->
+        <div class="stat-card">
+          <i class="fas fa-money-bill-wave stat-icon"></i>
+          <div class="stat-value" id="totalKomisi">Rp 0</div>
+          <div class="stat-label">Total Komisi</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-user-check stat-icon"></i>
+          <div class="stat-value" id="referralL1">0</div>
+          <div class="stat-label">Level 1</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-user-friends stat-icon"></i>
+          <div class="stat-value" id="referralL2">0</div>
+          <div class="stat-label">Level 2</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-users stat-icon"></i>
+          <div class="stat-value" id="referralL3">0</div>
+          <div class="stat-label">Level 3</div>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <h2 class="section-title">Struktur Komisi</h2>
+      <div class="commission-structure">
+        <div class="commission-level level-1">
+          <div class="level-info">
+            <div class="level-badge">1</div>
+            <div class="level-details">
+              <h3>Level 1 - Langsung</h3>
+              <p>Teman yang Anda undang langsung</p>
+            </div>
+          </div>
+          <div class="commission-amount">
+            <div class="commission-percent">25%</div>
+            <div class="commission-desc">dari pembelian pertama</div>
+          </div>
+        </div>
+        <div class="commission-level level-2">
+          <div class="level-info">
+            <div class="level-badge">2</div>
+            <div class="level-details">
+              <h3>Level 2 - Tidak Langsung</h3>
+              <p>Teman yang diundang oleh Level 1 Anda</p>
+            </div>
+          </div>
+          <div class="commission-amount">
+            <div class="commission-percent">2%</div>
+            <div class="commission-desc">dari pembelian pertama</div>
+          </div>
+        </div>
+        <div class="commission-level level-3">
+          <div class="level-info">
+            <div class="level-badge">3</div>
+            <div class="level-details">
+              <h3>Level 3 - Tidak Langsung</h3>
+              <p>Teman yang diundang oleh Level 2 Anda</p>
+            </div>
+          </div>
+          <div class="commission-amount">
+            <div class="commission-percent">1%</div>
+            <div class="commission-desc">dari pembelian pertama</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="motivation-section">
+      <h2 class="section-title">Raih Kesuksesan Bersama</h2>
+      <div class="motivation-card">
+        <i class="fas fa-trophy motivation-icon"></i>
+        <div class="motivation-title">Bangun Jaringan Anda!</div>
+        <div class="motivation-text">
+          Setiap referral yang bergabung bukan hanya memberikan komisi, tetapi juga memperluas jaringan bisnis Anda. 
+          Raih kesuksesan finansial dengan membangun tim yang solid dalam industri energi terbarukan!
+        </div>
+        <div class="motivation-tips">
+          <div class="tip-item">
+            <div class="tip-title">📈 Passive Income</div>
+            <div class="tip-desc">Dapatkan penghasilan tambahan dari setiap pembelian produk energi surya oleh jaringan Anda</div>
+          </div>
+          <div class="tip-item">
+            <div class="tip-title">👥 Multi Level</div>
+            <div class="tip-desc">Komisi tidak hanya dari level 1, tapi juga dari level 2 dan 3 jaringan Anda</div>
+          </div>
+          <div class="tip-item">
+            <div class="tip-title">🚀 Unlimited Potential</div>
+            <div class="tip-desc">Tidak ada batas jumlah referral yang bisa Anda dapatkan dalam bisnis energi terbarukan</div>
+          </div>
+          <div class="tip-item">
+            <div class="tip-title">💡 Smart Strategy</div>
+            <div class="tip-desc">Fokus pada kualitas jaringan untuk hasil yang maksimal dan berkelanjutan</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal untuk salin berhasil -->
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3 class="modal-title">Berhasil Disalin!</h3>
+      <p class="modal-message">Tautan referral telah disalin ke clipboard.</p>
+      <button class="modal-button" onclick="hideModal('success')">
+        Mengerti
+      </button>
+    </div>
+  </div>
+  
+  <!-- PERBAIKAN: Menghapus seluruh bagian bottom navigation -->
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuJSxpcFZ1QI-dEsEnx2qSqlb0wsvs6Mc",
+      authDomain: "lginvest-776cf.firebaseapp.com",
+      databaseURL: "https://lginvest-776cf-default-rtdb.firebaseio.com",
+      projectId: "lginvest-776cf",
+      storageBucket: "lginvest-776cf.firebasestorage.app",
+      messagingSenderId: "831934282072",
+      appId: "1:831934282072:web:6a8b7a5bcba5d4d1264d2d",
+      measurementId: "G-265YF9DYCF"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Flag untuk mencegah pemrosesan ganda
+    let isProcessing = false;
+
+    function formatRupiah(n) {
+      return 'Rp ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    // Fungsi untuk memuat data referral user
+    async function loadReferralData() {
+      const nohp = localStorage.getItem('nohp');
+      if (!nohp) {
+        showMessage('Error', 'Anda harus login terlebih dahulu');
+        return;
+      }
+
+      try {
+        // Tampilkan loading state
+        document.getElementById('referralCode').innerHTML = '<div class="loading-spinner"></div> Memuat...';
+        
+        // Ambil data user
+        const refUser = ref(db, 'users/' + nohp);
+        const snapUser = await get(refUser);
+        
+        if (!snapUser.exists()) {
+          showMessage('Error', 'Data user tidak ditemukan');
+          document.getElementById('referralCode').textContent = 'ERROR';
+          return;
+        }
+
+        const userData = snapUser.val();
+        
+        // Tampilkan kode referral
+        document.getElementById('referralCode').textContent = userData.referral_code || 'TIDAK ADA';
+        
+        // PERBAIKAN: Menggunakan format yang konsisten - mengarah ke register.html
+        const baseUrl = window.location.origin + window.location.pathname;
+        const pathSegments = baseUrl.split('/');
+        pathSegments.pop(); // Hapus nama file saat ini (undang.html)
+        const basePath = pathSegments.join('/');
+        const referralLink = basePath + '/register.html?ref=' + (userData.referral_code || '');
+        
+        document.getElementById('referralLink').value = referralLink;
+
+        // Hitung statistik referral
+        await loadReferralStats(nohp);
+
+      } catch (error) {
+        console.error('Error memuat data referral:', error);
+        showMessage('Error', 'Terjadi kesalahan saat memuat data referral');
+        document.getElementById('referralCode').textContent = 'ERROR';
+      }
+    }
+
+    // Fungsi untuk memuat statistik referral
+    async function loadReferralStats(nohp) {
+      try {
+        let totalKomisi = 0;
+        let referralL1 = 0;
+        let referralL2 = 0;
+        let referralL3 = 0;
+
+        // Ambil data komisi
+        const refCommissions = ref(db, 'commissions/' + nohp);
+        const snapCommissions = await get(refCommissions);
+        
+        if (snapCommissions.exists()) {
+          const commissions = snapCommissions.val();
+          
+          for (const key in commissions) {
+            const commission = commissions[key];
+            totalKomisi += commission.jumlah || 0;
+            
+            // Hitung jumlah referral per level
+            if (commission.level === 1) {
+              referralL1++;
+            } else if (commission.level === 2) {
+              referralL2++;
+            } else if (commission.level === 3) {
+              referralL3++;
+            }
+          }
+        }
+
+        // Update tampilan statistik
+        document.getElementById('totalKomisi').textContent = formatRupiah(totalKomisi);
+        document.getElementById('referralL1').textContent = referralL1;
+        document.getElementById('referralL2').textContent = referralL2;
+        document.getElementById('referralL3').textContent = referralL3;
+
+      } catch (error) {
+        console.error('Error memuat statistik referral:', error);
+        showMessage('Error', 'Terjadi kesalahan saat memuat statistik referral');
+      }
+    }
+
+    // Fungsi untuk menyalin URL referral
+    async function copyReferralUrl() {
+      if (isProcessing) return;
+      
+      isProcessing = true;
+      const copyBtn = document.getElementById('copyBtn');
+      const originalText = copyBtn.innerHTML;
+      
+      try {
+        const url = document.getElementById('referralLink').value;
+        if (url === 'Memuat tautan...') {
+          showMessage('Error', 'URL belum siap, silakan tunggu sebentar', 'error');
+          return;
+        }
+        
+        await navigator.clipboard.writeText(url);
+        copyBtn.innerHTML = '<i class="fas fa-check"></i> Tersalin';
+        copyBtn.classList.add('copied');
+        showModal('success');
+        
+        setTimeout(() => {
+          copyBtn.innerHTML = originalText;
+          copyBtn.classList.remove('copied');
+          isProcessing = false;
+        }, 2000);
+      } catch (err) {
+        console.error('Gagal menyalin: ', err);
+        showMessage('Error', 'Gagal menyalin URL', 'error');
+        isProcessing = false;
+      }
+    }
+
+    // PERBAIKAN: Fungsi untuk berbagi ke WhatsApp (mengarah ke register.html)
+    function shareToWhatsApp() {
+      const referralLink = document.getElementById('referralLink').value;
+      const referralCode = document.getElementById('referralCode').textContent;
+      
+      if (referralLink === 'Memuat tautan...' || referralCode === 'LOADING') {
+        showMessage('Error', 'Data belum siap, silakan tunggu sebentar', 'error');
+        return;
+      }
+      
+      const message = `Halo! Saya ingin mengundang Anda untuk bergabung dengan Solar Energy. Daftar di: ${referralLink} dan gunakan kode referrer: ${referralCode}`;
+      
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+      
+      window.open(whatsappUrl, '_blank');
+    }
+
+    // PERBAIKAN: Fungsi untuk berbagi ke Telegram (mengarah ke register.html)
+    function shareToTelegram() {
+      const referralLink = document.getElementById('referralLink').value;
+      const referralCode = document.getElementById('referralCode').textContent;
+      
+      if (referralLink === 'Memuat tautan...' || referralCode === 'LOADING') {
+        showMessage('Error', 'Data belum siap, silakan tunggu sebentar', 'error');
+        return;
+      }
+      
+      const message = `Halo! Saya ingin mengundang Anda untuk bergabung dengan Solar Energy. Daftar di: ${referralLink} dan gunakan kode referrer: ${referralCode}`;
+      
+      const encodedMessage = encodeURIComponent(message);
+      const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodedMessage}`;
+      
+      window.open(telegramUrl, '_blank');
+    }
+
+    // Fungsi untuk menampilkan modal
+    function showModal(modalType) {
+      document.getElementById(modalType + 'Modal').style.display = 'flex';
+    }
+
+    // Fungsi untuk menyembunyikan modal
+    function hideModal(modalType) {
+      document.getElementById(modalType + 'Modal').style.display = 'none';
+    }
+
+    // Fungsi untuk menampilkan modal pesan
+    function showMessage(title, message, type = 'success') {
+      const modal = document.getElementById('successModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalMessage = document.getElementById('modalMessage');
+      const modalIcon = document.getElementById('modalIcon');
+      const modalButton = document.getElementById('modalButton');
+      
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+      
+      // Set icon based on type
+      if (type === 'success') {
+        modalIcon.className = 'fas fa-check-circle modal-icon';
+        modal.className = 'modal success';
+        modalButton.textContent = 'Lanjutkan';
+      } else {
+        modalIcon.className = 'fas fa-exclamation-circle modal-icon';
+        modal.className = 'modal error';
+        modalButton.textContent = 'Tutup';
+      }
+      
+      // Show modal
+      modal.style.display = 'flex';
+      
+      // Auto hide after 2 seconds for success, manual close for errors
+      if (type === 'success') {
+        setTimeout(() => {
+          modal.style.display = 'none';
+        }, 2000);
+      }
+      
+      modalButton.onclick = function() {
+        modal.style.display = 'none';
+      };
+      
+      // Tambahkan event listener untuk klik di luar modal
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+    }
+
+    // Fungsi navigasi langsung tanpa pemberitahuan
+    function goPage(page) {
+      if (isProcessing) return;
+      window.location.href = page;
+    }
+
+    window.goPage = goPage;
+    window.copyReferralUrl = copyReferralUrl;
+    window.shareToWhatsApp = shareToWhatsApp;
+    window.shareToTelegram = shareToTelegram;
+    window.hideModal = hideModal;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Cek apakah user sudah login
+      if (!localStorage.getItem('nohp')) {
+        window.location.href = 'index.html';
+        return;
+      }
+      
+      loadReferralData();
+      
+      // Setup event listener for copy button
+      document.getElementById('copyBtn').addEventListener('click', copyReferralUrl);
+    });
+  </script>
+</body>
+</html>

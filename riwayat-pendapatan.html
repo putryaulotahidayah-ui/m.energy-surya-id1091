@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Solar Energy - Riwayat Pendapatan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    :root {
+      --solar-orange: #FF9500;
+      --solar-yellow: #FFCC00;
+      --solar-blue: #5AC8FA;
+      --solar-green: #34C759;
+      --solar-red: #FF3B30;
+      --bg: #000000;
+      --card: rgba(255, 255, 255, 0.1);
+      --card-light: rgba(255, 255, 255, 0.15);
+      --text: #FFFFFF;
+      --text-muted: #8E8E93;
+      --border: rgba(255, 255, 255, 0.2);
+      --gradient-solar: linear-gradient(135deg, #FF9500, #FFCC00);
+      --gradient-solar-dark: linear-gradient(135deg, #E68500, #E6B800);
+      --gradient-blue: linear-gradient(135deg, #5AC8FA, #007AFF);
+      --gradient-green: linear-gradient(135deg, #34C759, #32D74B);
+      --gradient-dark: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+      --shadow-glow: 0 10px 30px rgba(255, 149, 0, 0.3);
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+      font-size: 14px;
+      padding-bottom: 30px;
+    }
+    
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%);
+      filter: blur(40px);
+      animation: float 20s infinite linear;
+    }
+    
+    .bg-circle:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      left: 5%;
+      background: radial-gradient(circle, rgba(255, 149, 0, 0.1) 0%, rgba(255, 149, 0, 0) 70%);
+      animation-delay: 0s;
+    }
+    
+    .bg-circle:nth-child(2) {
+      width: 400px;
+      height: 400px;
+      top: 60%;
+      left: 80%;
+      background: radial-gradient(circle, rgba(255, 204, 0, 0.1) 0%, rgba(255, 204, 0, 0) 70%);
+      animation-delay: -5s;
+    }
+    
+    .bg-circle:nth-child(3) {
+      width: 250px;
+      height: 250px;
+      top: 30%;
+      left: 70%;
+      background: radial-gradient(circle, rgba(90, 200, 250, 0.1) 0%, rgba(90, 200, 250, 0) 70%);
+      animation-delay: -10s;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(20px, 20px) rotate(90deg);
+      }
+      50% {
+        transform: translate(0, 40px) rotate(180deg);
+      }
+      75% {
+        transform: translate(-20px, 20px) rotate(270deg);
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg);
+      }
+    }
+    
+    header {
+      background: var(--gradient-dark);
+      padding: 20px 16px 20px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: var(--gradient-solar);
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.15;
+      z-index: 0;
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .back-button {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .back-button:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateX(-3px);
+    }
+    
+    .header-text {
+      flex: 1;
+    }
+    
+    .header-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #FFFFFF, #E8E8E8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .header-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    
+    main {
+      padding: 20px 16px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    
+    .filter-tabs {
+      display: flex;
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 14px;
+      padding: 4px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .filter-tab {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .filter-tab.active {
+      background: var(--gradient-solar);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .stats-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-card {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-solar);
+    }
+    
+    .stat-card:nth-child(2)::before {
+      background: var(--gradient-blue);
+    }
+    
+    .stat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      background: var(--gradient-solar);
+      color: white;
+      font-size: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .stat-card:nth-child(2) .stat-icon {
+      background: var(--gradient-blue);
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+      background: var(--gradient-solar);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-card:nth-child(2) .stat-value {
+      background: var(--gradient-blue);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.5px;
+    }
+    
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 20px;
+      background: var(--gradient-solar);
+      border-radius: 2px;
+    }
+    
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .history-item {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .history-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+    
+    .history-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--gradient-solar);
+    }
+    
+    .history-item.referral::before {
+      background: var(--gradient-blue);
+    }
+    
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    
+    .history-type {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .history-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gradient-solar);
+      color: white;
+      font-size: 16px;
+    }
+    
+    .history-item.referral .history-icon {
+      background: var(--gradient-blue);
+    }
+    
+    .history-type-text {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .history-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .history-source {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    .history-amount {
+      font-size: 18px;
+      font-weight: 700;
+      background: var(--gradient-solar);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .history-item.referral .history-amount {
+      background: var(--gradient-blue);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .history-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .history-description {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    
+    .history-date {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    
+    .empty-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .empty-description {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 380px) {
+      .stat-card {
+        padding: 16px;
+        min-height: 90px;
+      }
+      
+      .stat-value {
+        font-size: 20px;
+      }
+      
+      .history-item {
+        padding: 16px;
+      }
+      
+      .history-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      
+      .history-amount {
+        align-self: flex-end;
+      }
+    }
+    
+    @media (max-width: 340px) {
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .history-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation">
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+  </div>
+
+  <header>
+    <div class="header-content">
+      <button class="back-button" onclick="goPage('profil.html')">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1 class="header-title">Riwayat Pendapatan</h1>
+        <p class="header-subtitle">Lihat semua pendapatan Anda</p>
+      </div>
+    </div>
+  </header>
+  
+  <main>
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterHistory('all')">Semua</button>
+      <button class="filter-tab" onclick="filterHistory('profit')">Profit Produk</button>
+      <button class="filter-tab" onclick="filterHistory('referral')">Bonus Referral</button>
+    </div>
+
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="stat-value" id="totalProfit">Rp 0</div>
+        <div class="stat-label">Total Profit Produk</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-gift"></i>
+        </div>
+        <div class="stat-value" id="totalReferralBonus">Rp 0</div>
+        <div class="stat-label">Total Bonus Referral</div>
+      </div>
+    </div>
+
+    <section class="history-section">
+      <h2 class="section-title">Riwayat Pendapatan</h2>
+      <div class="history-list" id="historyList">
+        <!-- Data riwayat akan dimuat di sini -->
+      </div>
+    </section>
+  </main>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuJSxpcFZ1QI-dEsEnx2qSqlb0wsvs6Mc",
+      authDomain: "lginvest-776cf.firebaseapp.com",
+      databaseURL: "https://lginvest-776cf-default-rtdb.firebaseio.com",
+      projectId: "lginvest-776cf",
+      storageBucket: "lginvest-776cf.firebasestorage.app",
+      messagingSenderId: "831934282072",
+      appId: "1:831934282072:web:6a8b7a5bcba5d4d1264d2d",
+      measurementId: "G-265YF9DYCF"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let allHistory = [];
+    let currentFilter = 'all';
+
+    function formatRupiah(n) {
+      return 'Rp ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    function formatDateTime(timestamp) {
+      try {
+        const date = new Date(timestamp);
+        if (isNaN(date.getTime())) {
+          return 'Tanggal tidak valid';
+        }
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        
+        return `${day}/${month}/${year} ${hours}:${minutes}`;
+      } catch (error) {
+        return 'Tanggal tidak valid';
+      }
+    }
+
+    // Fungsi untuk memuat data riwayat pendapatan
+    async function loadIncomeHistory() {
+      const nohp = localStorage.getItem('nohp');
+      if (!nohp) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      console.log('Memuat riwayat pendapatan untuk:', nohp);
+
+      try {
+        // Ambil data dari multiple sources
+        const [incomeHistorySnap, userSnap, purchasesSnap] = await Promise.all([
+          get(ref(db, 'income_history/' + nohp)),
+          get(ref(db, 'users/' + nohp)),
+          get(ref(db, 'purchases/' + nohp))
+        ]);
+
+        allHistory = [];
+        let totalProfit = 0;
+        let totalReferralBonus = 0;
+
+        // Data produk untuk referensi
+        const produkList = [
+          { kode: 'A', name: 'Solar Panel Mini' },
+          { kode: 'B', name: 'Solar Home System' },
+          { kode: 'C', name: 'Commercial Solar' },
+          { kode: 'D', name: 'Solar Farm Basic' },
+          { kode: 'E', name: 'Solar Farm Pro' },
+          { kode: 'F', name: 'Industrial Solar' },
+          { kode: 'G', name: 'Solar Power Plant' },
+          { kode: 'H', name: 'Mega Solar Project' },
+          { kode: 'I', name: 'Solar Energy Hub' },
+          { kode: 'J', name: 'Ultimate Solar Investment' }
+        ];
+
+        // 1. Process income_history data (utama)
+        if (incomeHistorySnap.exists()) {
+          const incomeData = incomeHistorySnap.val();
+          console.log('Data income_history ditemukan:', incomeData);
+          
+          for (const incomeId in incomeData) {
+            const income = incomeData[incomeId];
+            
+            if (income && income.amount !== undefined) {
+              const amount = parseInt(income.amount) || 0;
+              const type = income.type || 'profit';
+              const date = income.date || income.timestamp || new Date().toISOString();
+              
+              let title, description, source;
+              
+              if (type === 'profit') {
+                title = 'Profit Investasi';
+                source = income.source || 'Paket Investasi';
+                description = income.description || `Profit dari ${source}`;
+                totalProfit += amount;
+              } else if (type === 'referral') {
+                title = 'Bonus Program Referral';
+                source = income.source || 'Program Referral';
+                description = income.description || `Bonus dari ${source}`;
+                totalReferralBonus += amount;
+              } else {
+                title = income.title || 'Pendapatan';
+                source = income.source || 'Sistem';
+                description = income.description || 'Pendapatan dari sistem';
+                if (type === 'commission') totalProfit += amount;
+              }
+              
+              allHistory.push({
+                id: incomeId,
+                type: type,
+                title: title,
+                source: source,
+                amount: amount,
+                description: description,
+                date: date,
+                timestamp: new Date(date).getTime() || Date.now()
+              });
+            }
+          }
+        }
+
+        // 2. Process claimed_missions data (untuk bonus referral)
+        if (userSnap.exists()) {
+          const userData = userSnap.val();
+          const claimedMissions = userData.claimed_missions || {};
+          
+          for (const missionId in claimedMissions) {
+            const mission = claimedMissions[missionId];
+            if (mission && mission.reward) {
+              // Check if this mission is already in income_history
+              const existing = allHistory.find(item => 
+                item.type === 'referral' && 
+                item.amount === mission.reward &&
+                Math.abs(new Date(item.date).getTime() - new Date(mission.claimed_at).getTime()) < 60000 // within 1 minute
+              );
+              
+              if (!existing) {
+                const amount = parseInt(mission.reward) || 0;
+                allHistory.push({
+                  id: `mission_${missionId}`,
+                  type: 'referral',
+                  title: 'Bonus Program Referral',
+                  source: mission.mission_title || 'Program Referral',
+                  amount: amount,
+                  description: `Bonus dari program referral: ${mission.mission_title || 'Misi Referral'}`,
+                  date: mission.claimed_at || new Date().toISOString(),
+                  timestamp: new Date(mission.claimed_at || new Date()).getTime()
+                });
+                totalReferralBonus += amount;
+              }
+            }
+          }
+        }
+
+        // 3. Process purchases data untuk melihat penarikan profit
+        if (purchasesSnap.exists()) {
+          const purchasesData = purchasesSnap.val();
+          
+          for (const kode in purchasesData) {
+            const purchase = purchasesData[kode];
+            const produk = produkList.find(p => p.kode === kode);
+            
+            if (purchase && purchase.total_withdrawn && purchase.total_withdrawn > 0) {
+              // Cek apakah sudah ada di income_history
+              const existing = allHistory.find(item => 
+                item.type === 'profit' && 
+                item.source === (produk?.name || `Paket ${kode}`) &&
+                Math.abs(new Date(item.date).getTime() - new Date(purchase.last_withdraw).getTime()) < 60000
+              );
+              
+              if (!existing && purchase.last_withdraw) {
+                // Tambahkan sebagai profit produk
+                allHistory.push({
+                  id: `profit_${kode}_${purchase.last_withdraw}`,
+                  type: 'profit',
+                  title: 'Profit Investasi',
+                  source: produk?.name || `Paket ${kode}`,
+                  amount: purchase.total_withdrawn,
+                  description: `Penarikan profit dari ${produk?.name || `Paket ${kode}`}`,
+                  date: purchase.last_withdraw,
+                  timestamp: new Date(purchase.last_withdraw).getTime()
+                });
+                totalProfit += purchase.total_withdrawn;
+              }
+            }
+          }
+        }
+
+        // Update statistics
+        document.getElementById('totalProfit').textContent = formatRupiah(totalProfit);
+        document.getElementById('totalReferralBonus').textContent = formatRupiah(totalReferralBonus);
+
+        // Sort by date (newest first)
+        allHistory.sort((a, b) => b.timestamp - a.timestamp);
+
+        // Display history
+        displayHistory(currentFilter);
+
+      } catch (error) {
+        console.error('Error loading income history:', error);
+        showEmptyState();
+      }
+    }
+
+    // Real-time listener untuk update otomatis
+    function setupRealTimeListener() {
+      const nohp = localStorage.getItem('nohp');
+      if (!nohp) return;
+
+      const refIncomeHistory = ref(db, 'income_history/' + nohp);
+      onValue(refIncomeHistory, (snapshot) => {
+        console.log('Real-time update detected, reloading data...');
+        loadIncomeHistory();
+      });
+    }
+
+    function showEmptyState() {
+      const historyList = document.getElementById('historyList');
+      historyList.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="fas fa-file-invoice-dollar"></i>
+          </div>
+          <div class="empty-title">Belum Ada Riwayat</div>
+          <div class="empty-description">
+            Anda belum memiliki riwayat pendapatan. Mulai investasi atau ajak teman untuk mendapatkan pendapatan.
+          </div>
+        </div>
+      `;
+    }
+
+    // Fungsi untuk menampilkan riwayat berdasarkan filter
+    function displayHistory(filter) {
+      const historyList = document.getElementById('historyList');
+      
+      if (allHistory.length === 0) {
+        showEmptyState();
+        return;
+      }
+
+      const filteredHistory = allHistory.filter(item => {
+        if (filter === 'all') return true;
+        if (filter === 'profit') return item.type === 'profit';
+        if (filter === 'referral') return item.type === 'referral';
+        return false;
+      });
+
+      if (filteredHistory.length === 0) {
+        historyList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <i class="fas fa-filter"></i>
+            </div>
+            <div class="empty-title">Tidak Ada Data</div>
+            <div class="empty-description">
+              Tidak ada riwayat ${filter === 'profit' ? 'profit produk' : 'bonus referral'} untuk ditampilkan.
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      historyList.innerHTML = '';
+      
+      filteredHistory.forEach(item => {
+        const div = document.createElement('div');
+        div.className = `history-item ${item.type}`;
+        div.innerHTML = `
+          <div class="history-header">
+            <div class="history-type">
+              <div class="history-icon">
+                <i class="fas ${item.type === 'profit' ? 'fa-chart-line' : 'fa-gift'}"></i>
+              </div>
+              <div class="history-type-text">
+                <div class="history-title">${item.title}</div>
+                <div class="history-source">${item.source}</div>
+              </div>
+            </div>
+            <div class="history-amount">+${formatRupiah(item.amount)}</div>
+          </div>
+          <div class="history-details">
+            <div class="history-description">${item.description}</div>
+            <div class="history-date">${formatDateTime(item.date)}</div>
+          </div>
+        `;
+        historyList.appendChild(div);
+      });
+    }
+
+    // Fungsi untuk filter riwayat
+    function filterHistory(filter) {
+      currentFilter = filter;
+      
+      // Update active tab
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Tampilkan riwayat yang difilter
+      displayHistory(filter);
+    }
+
+    // Fungsi navigasi langsung tanpa pemberitahuan
+    function goPage(page) {
+      window.location.href = page;
+    }
+
+    window.goPage = goPage;
+    window.filterHistory = filterHistory;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadIncomeHistory();
+      setupRealTimeListener();
+    });
+  </script>
+</body>
+</html>

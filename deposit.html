@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Solar Energy - Deposit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    :root {
+      --solar-orange: #FF9500;
+      --solar-yellow: #FFCC00;
+      --solar-blue: #5AC8FA;
+      --solar-green: #34C759;
+      --solar-red: #FF3B30;
+      --bg: #000000;
+      --card: rgba(255, 255, 255, 0.1);
+      --card-light: rgba(255, 255, 255, 0.15);
+      --text: #FFFFFF;
+      --text-muted: #8E8E93;
+      --border: rgba(255, 255, 255, 0.2);
+      --gradient-solar: linear-gradient(135deg, #FF9500, #FFCC00);
+      --gradient-solar-dark: linear-gradient(135deg, #E68500, #E6B800);
+      --gradient-blue: linear-gradient(135deg, #5AC8FA, #007AFF);
+      --gradient-green: linear-gradient(135deg, #34C759, #32D74B);
+      --gradient-dark: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+      --shadow-glow: 0 10px 30px rgba(255, 149, 0, 0.3);
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+      font-size: 15px;
+    }
+    
+    /* Class untuk mencegah scroll di belakang modal */
+    .body-no-scroll {
+      overflow: hidden;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+    }
+    
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%);
+      filter: blur(40px);
+      animation: float 20s infinite linear;
+    }
+    
+    .bg-circle:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      left: 5%;
+      background: radial-gradient(circle, rgba(255, 149, 0, 0.1) 0%, rgba(255, 149, 0, 0) 70%);
+      animation-delay: 0s;
+    }
+    
+    .bg-circle:nth-child(2) {
+      width: 400px;
+      height: 400px;
+      top: 60%;
+      left: 80%;
+      background: radial-gradient(circle, rgba(255, 204, 0, 0.1) 0%, rgba(255, 204, 0, 0) 70%);
+      animation-delay: -5s;
+    }
+    
+    .bg-circle:nth-child(3) {
+      width: 250px;
+      height: 250px;
+      top: 30%;
+      left: 70%;
+      background: radial-gradient(circle, rgba(90, 200, 250, 0.1) 0%, rgba(90, 200, 250, 0) 70%);
+      animation-delay: -10s;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(20px, 20px) rotate(90deg);
+      }
+      50% {
+        transform: translate(0, 40px) rotate(180deg);
+      }
+      75% {
+        transform: translate(-20px, 20px) rotate(270deg);
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg);
+      }
+    }
+    
+    header {
+      background: var(--gradient-dark);
+      padding: 20px 16px 30px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: var(--gradient-solar);
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.15;
+      z-index: 0;
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .back-button {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .back-button:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateX(-3px);
+    }
+    
+    .header-text {
+      flex: 1;
+    }
+    
+    .header-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #FFFFFF, #E8E8E8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .header-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    
+    .saldo-card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    
+    .saldo-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-green);
+    }
+    
+    .saldo-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    
+    .saldo-amount {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #FFFFFF, #E8E8E8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      word-break: break-all;
+      overflow-wrap: break-word;
+      line-height: 1.2;
+    }
+    
+    main {
+      padding: 20px 16px;
+      max-width: 500px;
+      margin: auto;
+      padding-bottom: 40px;
+    }
+    
+    /* Card Styles */
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-solar);
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .card-title i {
+      color: var(--solar-orange);
+    }
+    
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 14px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--solar-orange);
+      background: rgba(255,255,255,0.15);
+    }
+    
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+    
+    /* Quick Amounts */
+    .quick-amounts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    
+    .amount-btn {
+      padding: 12px 8px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 13px;
+    }
+    
+    .amount-btn:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+    }
+    
+    .amount-btn.active {
+      background: var(--gradient-solar);
+      color: white;
+      border-color: var(--solar-orange);
+    }
+    
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    
+    .btn-primary {
+      background: var(--gradient-solar);
+      color: white;
+    }
+    
+    .btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+    
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    /* Info Card */
+    .info-card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      margin-top: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-blue);
+    }
+    
+    .info-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .info-title i {
+      color: var(--solar-orange);
+    }
+    
+    .info-list {
+      list-style: none;
+    }
+    
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    .info-item i {
+      color: var(--solar-green);
+      margin-top: 2px;
+      font-size: 11px;
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+      padding: 20px;
+    }
+    
+    .modal-content {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 32px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: var(--shadow-glow);
+      animation: modalAppear 0.4s ease;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .modal-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-solar);
+    }
+    
+    @keyframes modalAppear {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    
+    .modal-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      color: var(--solar-orange);
+    }
+    
+    .modal.error .modal-icon {
+      color: var(--solar-red);
+    }
+    
+    .modal-title {
+      font-size: 24px;
+      margin-bottom: 12px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    
+    .modal-message {
+      margin-bottom: 24px;
+      color: var(--text-muted);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    
+    .modal-button {
+      background: var(--gradient-solar);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 32px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .modal-button:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+    
+    /* Loading Animation */
+    .loading-spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s ease-in-out infinite;
+      margin-right: 8px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Full Screen Loading */
+    .fullscreen-loading {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    
+    .fullscreen-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      border-top-color: var(--solar-orange);
+      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 16px;
+    }
+    
+    .fullscreen-loading p {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+    
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 16px 0;
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+      z-index: 100;
+    }
+    
+    .nav-item {
+      background: none;
+      border: none;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+      padding: 10px 16px;
+      border-radius: 16px;
+      cursor: pointer;
+    }
+    
+    .nav-item.active {
+      color: var(--solar-orange);
+      font-weight: 700;
+      background: rgba(255, 149, 0, 0.15);
+    }
+    
+    .nav-icon {
+      font-size: 22px;
+      transition: transform 0.3s ease;
+    }
+    
+    .nav-item.active .nav-icon {
+      transform: scale(1.15);
+    }
+    
+    /* New styles for QRIS modal */
+    .qris-modal .modal-content {
+      max-width: 420px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .qris-card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 0 0 20px 0;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .qris-image {
+      width: 100%;
+      max-width: 240px;
+      height: auto;
+      border-radius: 12px;
+      margin: 0 auto 15px;
+      display: block;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      border: 2px solid rgba(255,255,255,0.1);
+    }
+    
+    .confirm-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--gradient-solar);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+      margin: 15px 0;
+      flex-shrink: 0;
+    }
+    
+    .confirm-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .confirm-btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+    
+    .instruction-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 12px 0;
+      line-height: 1.5;
+      text-align: left;
+    }
+    
+    .amount-display {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--solar-green);
+      margin: 10px 0;
+      padding: 8px 16px;
+      background: rgba(52,199,89,0.1);
+      border-radius: 10px;
+      display: inline-block;
+    }
+    
+    .transfer-info {
+      background: rgba(255,149,0,0.1);
+      padding: 10px 15px;
+      border-radius: 10px;
+      margin: 12px 0;
+      border-left: 3px solid var(--solar-orange);
+    }
+    
+    .transfer-info-text {
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 600;
+    }
+    
+    /* Responsive */
+    @media (max-width: 480px) {
+      .quick-amounts {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .card, .saldo-card, .info-card {
+        padding: 20px;
+      }
+      
+      .form-input {
+        padding: 12px;
+        font-size: 15px;
+      }
+      
+      .saldo-amount {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation">
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+  </div>
+
+  <!-- Full Screen Loading -->
+  <div class="fullscreen-loading" id="fullscreenLoading">
+    <div class="fullscreen-spinner"></div>
+    <p>Memproses deposit...</p>
+  </div>
+
+  <header>
+    <div class="header-content">
+      <button class="back-button" onclick="goPage('dashboard.html')">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1 class="header-title">Isi Ulang Saldo</h1>
+        <p class="header-subtitle">Deposit saldo ke akun Anda</p>
+      </div>
+    </div>
+  </header>
+  
+  <main>
+    <div class="saldo-card">
+      <div class="saldo-label">Saldo Tersedia</div>
+      <div class="saldo-amount" id="currentBalance">Rp 0</div>
+    </div>
+    
+    <div class="card">
+      <h2 class="card-title">
+        <i class="fas fa-money-bill-wave"></i>
+        <span>Jumlah Deposit</span>
+      </h2>
+      
+      <div class="form-group">
+        <label class="form-label">Masukkan Jumlah Deposit (min Rp 80.000)</label>
+        <input type="text" class="form-input" id="amountInput" placeholder="Masukkan jumlah (min Rp 80.000)" min="80000">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Nama Pengiriman</label>
+        <input type="text" class="form-input" id="transferMethod" placeholder="Contoh: DANA, GoPay, OVO, BRI, BCA, dll">
+      </div>
+      
+      <div class="quick-amounts">
+        <button class="amount-btn" onclick="setAmount(80000)">Rp 80.000</button>
+        <button class="amount-btn" onclick="setAmount(100000)">Rp 100.000</button>
+        <button class="amount-btn" onclick="setAmount(250000)">Rp 250.000</button>
+        <button class="amount-btn" onclick="setAmount(500000)">Rp 500.000</button>
+        <button class="amount-btn" onclick="setAmount(750000)">Rp 750.000</button>
+        <button class="amount-btn" onclick="setAmount(1000000)">Rp 1.000.000</button>
+      </div>
+      
+      <button class="btn btn-primary" id="depositButton" onclick="showQRISModal()">
+        <i class="fas fa-wallet"></i>
+        Ajukan Deposit
+      </button>
+    </div>
+    
+    <div class="info-card">
+      <h3 class="info-title">
+        <i class="fas fa-info-circle"></i>
+        Informasi Deposit
+      </h3>
+      <ul class="info-list">
+        <li class="info-item">
+          <i class="fas fa-check"></i>
+          <span>Saldo akan masuk otomatis setelah pembayaran</span>
+        </li>
+        <li class="info-item">
+          <i class="fas fa-check"></i>
+          <span>Minimal deposit: Rp 80.000</span>
+        </li>
+        <li class="info-item">
+          <i class="fas fa-check"></i>
+          <span>Tidak ada biaya administrasi</span>
+        </li>
+        <li class="info-item">
+          <i class="fas fa-check"></i>
+          <span>Proses pembayaran melalui QRIS</span>
+        </li>
+      </ul>
+    </div>
+  </main>
+  
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <div class="nav-item" onclick="goPage('dashboard.html')">
+      <i class="fas fa-home nav-icon"></i>
+      <span>Beranda</span>
+    </div>
+    <div class="nav-item" onclick="goPage('investasi.html')">
+      <i class="fas fa-chart-line nav-icon"></i>
+      <span>Investasi</span>
+    </div>
+    <div class="nav-item" onclick="goPage('undang.html')">
+      <i class="fas fa-share-alt nav-icon"></i>
+      <span>Undang</span>
+    </div>
+    <div class="nav-item" onclick="goPage('profil.html')">
+      <i class="fas fa-user nav-icon"></i>
+      <span>Profil</span>
+    </div>
+  </nav>
+  
+  <!-- Modal untuk QRIS -->
+  <div class="modal qris-modal" id="qrisModal">
+    <div class="modal-content">
+      <h3 class="modal-title">Pembayaran QRIS</h3>
+      
+      <div class="qris-card">
+        <img src="https://files.catbox.moe/n3qucs.jpg" alt="QRIS Code" class="qris-image">
+        <div class="amount-display" id="modalAmount">Rp 0</div>
+        <div class="transfer-info">
+          <div class="transfer-info-text" id="modalTransferInfo">Nama Pengiriman: -</div>
+        </div>
+      </div>
+      
+      <p class="instruction-text">
+        <i class="fas fa-check-circle" style="color: var(--solar-green);"></i> 
+        <strong>Pastikan anda mengklik konfirmasi deposit</strong> setelah melakukan pembayaran untuk mempercepat proses verifikasi.
+      </p>
+      
+      <button class="confirm-btn" id="confirmDepositBtn" onclick="confirmDeposit()">
+        <i class="fas fa-check-circle"></i>
+        Konfirmasi Deposit
+      </button>
+    </div>
+  </div>
+  
+  <!-- Modal untuk pesan error deposit pending -->
+  <div class="modal" id="pendingDepositModal">
+    <div class="modal-content">
+      <i class="fas fa-exclamation-triangle modal-icon" style="color: var(--solar-red);"></i>
+      <h3 class="modal-title">Deposit Gagal</h3>
+      <p class="modal-message">Anda masih memiliki riwayat deposit yang sedang ditinjau. Hubungi admin resmi untuk konfirmasi.</p>
+      <button class="modal-button" onclick="closePendingModal()">Tutup</button>
+    </div>
+  </div>
+  
+  <!-- Modal untuk pesan sukses -->
+  <div class="modal" id="messageModal">
+    <div class="modal-content">
+      <i class="fas fa-check-circle modal-icon" id="modalIcon"></i>
+      <h3 class="modal-title" id="modalTitle">Deposit Berhasil</h3>
+      <p class="modal-message" id="modalMessage">Saldo berhasil ditambahkan ke akun Anda.</p>
+      <button class="modal-button" id="modalButton">Lanjutkan</button>
+    </div>
+  </div>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, get, update, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuJSxpcFZ1QI-dEsEnx2qSqlb0wsvs6Mc",
+      authDomain: "lginvest-776cf.firebaseapp.com",
+      databaseURL: "https://lginvest-776cf-default-rtdb.firebaseio.com",
+      projectId: "lginvest-776cf",
+      storageBucket: "lginvest-776cf.firebasestorage.app",
+      messagingSenderId: "831934282072",
+      appId: "1:831934282072:web:6a8b7a5bcba5d4d1264d2d",
+      measurementId: "G-265YF9DYCF"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Sistem anti double click
+    let isProcessing = false;
+
+    // Format Rupiah
+    function formatRupiah(n) {
+      return 'Rp ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    // Fungsi untuk memuat saldo user
+    function loadSaldo() {
+      const nohp = localStorage.getItem('nohp');
+      if (!nohp) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      const refUser = ref(db, 'users/' + nohp);
+      
+      onValue(refUser, (snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          document.getElementById('currentBalance').textContent = formatRupiah(data.saldo || 0);
+        } else {
+          document.getElementById('currentBalance').textContent = formatRupiah(0);
+        }
+      }, {
+        onlyOnce: false
+      });
+    }
+
+    // Fungsi untuk mengecek apakah ada deposit pending
+    async function checkPendingDeposit() {
+      const nohp = localStorage.getItem('nohp');
+      if (!nohp) return false;
+
+      try {
+        const transactionsRef = ref(db, 'transactions/' + nohp);
+        const snapshot = await get(transactionsRef);
+        
+        if (snapshot.exists()) {
+          const transactions = snapshot.val();
+          // Cek apakah ada transaksi dengan status 'pending'
+          for (let key in transactions) {
+            if (transactions[key].status === 'pending') {
+              return true;
+            }
+          }
+        }
+        return false;
+      } catch (error) {
+        console.error('Error checking pending deposit:', error);
+        return false;
+      }
+    }
+
+    // Fungsi untuk mengatur jumlah deposit
+    function setAmount(amount) {
+      document.getElementById('amountInput').value = amount.toLocaleString('id-ID');
+      
+      document.querySelectorAll('.amount-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    // Format input dengan titik
+    document.getElementById('amountInput').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\./g, '');
+      if (!isNaN(value) && value !== '') {
+        e.target.value = parseInt(value).toLocaleString('id-ID');
+      }
+    });
+
+    // Fungsi untuk menampilkan modal QRIS
+    async function showQRISModal() {
+      if (isProcessing) return;
+      
+      // Cek apakah ada deposit pending
+      const hasPending = await checkPendingDeposit();
+      if (hasPending) {
+        document.getElementById('pendingDepositModal').style.display = 'flex';
+        return;
+      }
+
+      isProcessing = true;
+
+      const amountInput = document.getElementById('amountInput');
+      const transferMethod = document.getElementById('transferMethod').value.trim();
+      
+      let amountValue = amountInput.value.replace(/\./g, '');
+      const amount = parseInt(amountValue);
+      
+      // Validasi input
+      if (!amount || amount < 80000) {
+        showMessage('Jumlah Tidak Valid', 'Minimal deposit adalah Rp 80.000', 'error');
+        isProcessing = false;
+        return;
+      }
+
+      if (!transferMethod) {
+        showMessage('Nama Pengiriman Kosong', 'Harap isi nama pengiriman yang akan digunakan', 'error');
+        isProcessing = false;
+        return;
+      }
+
+      // Tampilkan loading
+      document.getElementById('fullscreenLoading').style.display = 'flex';
+
+      // Simpan transaksi ke database
+      try {
+        const nohp = localStorage.getItem('nohp');
+        const transactionId = 'DP' + Date.now() + Math.random().toString(36).substr(2, 8).toUpperCase();
+        const transactionRef = ref(db, 'transactions/' + nohp + '/' + transactionId);
+        
+        await update(transactionRef, {
+          type: 'deposit',
+          amount: amount,
+          date: new Date().toISOString(),
+          status: 'pending',
+          transactionId: transactionId,
+          paymentMethod: transferMethod,
+          customerId: nohp,
+          timestamp: Date.now()
+        });
+
+        // Simpan juga di local storage untuk akses mudah
+        localStorage.setItem('pendingTransaction', JSON.stringify({
+          transactionId: transactionId,
+          amount: amount,
+          paymentMethod: transferMethod,
+          timestamp: new Date().toISOString()
+        }));
+
+        // Tunggu sebentar untuk simulasi proses
+        setTimeout(() => {
+          // Sembunyikan loading
+          document.getElementById('fullscreenLoading').style.display = 'none';
+          
+          // Tampilkan jumlah di modal
+          document.getElementById('modalAmount').textContent = formatRupiah(amount);
+          document.getElementById('modalTransferInfo').textContent = `Nama Pengiriman: ${transferMethod}`;
+          
+          // Tampilkan modal QRIS
+          document.getElementById('qrisModal').style.display = 'flex';
+          
+          isProcessing = false;
+        }, 2000);
+        
+      } catch (error) {
+        console.error('Error saat deposit:', error);
+        document.getElementById('fullscreenLoading').style.display = 'none';
+        showMessage('Error', 'Terjadi kesalahan saat memproses deposit', 'error');
+        isProcessing = false;
+      }
+    }
+
+    // Fungsi konfirmasi deposit
+    async function confirmDeposit() {
+      if (isProcessing) return;
+      
+      isProcessing = true;
+
+      // Tampilkan loading state
+      const button = document.getElementById('confirmDepositBtn');
+      const originalText = button.innerHTML;
+      button.innerHTML = '<div class="loading-spinner"></div> Memproses...';
+      button.disabled = true;
+
+      // Tampilkan loading fullscreen
+      document.getElementById('fullscreenLoading').style.display = 'flex';
+
+      // Tunggu sebentar untuk simulasi loading
+      setTimeout(() => {
+        document.getElementById('fullscreenLoading').style.display = 'none';
+        document.getElementById('qrisModal').style.display = 'none';
+        
+        // Tampilkan pesan sukses
+        showMessage('Deposit Berhasil', 'Permintaan deposit Anda telah dikirim. Saldo akan ditambahkan setelah pembayaran dikonfirmasi.', 'success');
+        
+        isProcessing = false;
+      }, 2000);
+    }
+
+    // Fungsi untuk menutup modal pending deposit
+    function closePendingModal() {
+      document.getElementById('pendingDepositModal').style.display = 'none';
+    }
+
+    // Fungsi untuk menampilkan modal pesan
+    function showMessage(title, message, type = 'success') {
+      const modal = document.getElementById('messageModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalMessage = document.getElementById('modalMessage');
+      const modalIcon = document.getElementById('modalIcon');
+      const modalButton = document.getElementById('modalButton');
+      
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+      
+      if (type === 'success') {
+        modalIcon.className = 'fas fa-check-circle modal-icon';
+        modal.className = 'modal';
+        modalButton.textContent = 'Lanjutkan';
+        modalButton.onclick = function() {
+          modal.style.display = 'none';
+          window.location.href = 'dashboard.html';
+        };
+      } else {
+        modalIcon.className = 'fas fa-exclamation-circle modal-icon';
+        modal.className = 'modal error';
+        modalButton.textContent = 'Tutup';
+        modalButton.onclick = function() {
+          modal.style.display = 'none';
+        };
+      }
+      
+      modal.style.display = 'flex';
+      
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+          if (type === 'success') {
+            window.location.href = 'dashboard.html';
+          }
+        }
+      });
+    }
+
+    // Fungsi navigasi
+    function goPage(page) {
+      window.location.href = page;
+    }
+
+    window.goPage = goPage;
+    window.setAmount = setAmount;
+    window.showQRISModal = showQRISModal;
+    window.confirmDeposit = confirmDeposit;
+    window.closePendingModal = closePendingModal;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!localStorage.getItem('nohp')) {
+        window.location.href = 'index.html';
+        return;
+      }
+      
+      loadSaldo();
+      
+      document.getElementById('amountInput').addEventListener('input', function() {
+        document.querySelectorAll('.amount-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>

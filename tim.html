@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Solar Energy - Tim Saya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    :root {
+      --solar-orange: #FF9500;
+      --solar-yellow: #FFCC00;
+      --solar-blue: #5AC8FA;
+      --solar-green: #34C759;
+      --solar-red: #FF3B30;
+      --bg: #000000;
+      --card: rgba(255, 255, 255, 0.1);
+      --card-light: rgba(255, 255, 255, 0.15);
+      --text: #FFFFFF;
+      --text-muted: #8E8E93;
+      --border: rgba(255, 255, 255, 0.2);
+      --gradient-solar: linear-gradient(135deg, #FF9500, #FFCC00);
+      --gradient-solar-dark: linear-gradient(135deg, #E68500, #E6B800);
+      --gradient-blue: linear-gradient(135deg, #5AC8FA, #007AFF);
+      --gradient-green: linear-gradient(135deg, #34C759, #32D74B);
+      --gradient-dark: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+      --shadow-glow: 0 10px 30px rgba(255, 149, 0, 0.3);
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%);
+      filter: blur(40px);
+      animation: float 20s infinite linear;
+    }
+    
+    .bg-circle:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      left: 5%;
+      background: radial-gradient(circle, rgba(255, 149, 0, 0.1) 0%, rgba(255, 149, 0, 0) 70%);
+      animation-delay: 0s;
+    }
+    
+    .bg-circle:nth-child(2) {
+      width: 400px;
+      height: 400px;
+      top: 60%;
+      left: 80%;
+      background: radial-gradient(circle, rgba(255, 204, 0, 0.1) 0%, rgba(255, 204, 0, 0) 70%);
+      animation-delay: -5s;
+    }
+    
+    .bg-circle:nth-child(3) {
+      width: 250px;
+      height: 250px;
+      top: 30%;
+      left: 70%;
+      background: radial-gradient(circle, rgba(90, 200, 250, 0.1) 0%, rgba(90, 200, 250, 0) 70%);
+      animation-delay: -10s;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(20px, 20px) rotate(90deg);
+      }
+      50% {
+        transform: translate(0, 40px) rotate(180deg);
+      }
+      75% {
+        transform: translate(-20px, 20px) rotate(270deg);
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg);
+      }
+    }
+    
+    header {
+      background: var(--gradient-dark);
+      padding: 20px 16px 30px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: var(--gradient-solar);
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.15;
+      z-index: 0;
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .back-button {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .back-button:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateX(-3px);
+    }
+    
+    .header-text {
+      flex: 1;
+    }
+    
+    .header-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #FFFFFF, #E8E8E8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .header-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    
+    main {
+      padding: 20px 16px;
+      max-width: 1000px;
+      margin: auto;
+      padding-bottom: 40px;
+    }
+    
+    /* Card Styles */
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-solar);
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .card-title i {
+      color: var(--solar-orange);
+    }
+    
+    /* Referral Section */
+    .referral-code {
+      background: rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 16px;
+      margin: 16px 0;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      border: 2px dashed rgba(255,255,255,0.3);
+      position: relative;
+      z-index: 1;
+      font-family: 'Courier New', monospace;
+      word-break: break-all;
+      overflow-wrap: break-word;
+      text-align: center;
+    }
+    
+    .referral-link-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    
+    .referral-link {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 14px;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .copy-btn {
+      background: var(--gradient-solar);
+      border: none;
+      border-radius: 12px;
+      padding: 14px 20px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .copy-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .copy-btn.copied {
+      background: var(--gradient-green);
+    }
+    
+    .share-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    
+    .share-btn {
+      padding: 12px 16px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .share-whatsapp {
+      background: #25D366;
+      color: white;
+    }
+    
+    .share-telegram {
+      background: #0088CC;
+      color: white;
+    }
+    
+    .share-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    /* Stats Section */
+    .stats-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .stat-card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-glow);
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+    }
+    
+    .stat-card.active::before {
+      background: var(--gradient-green);
+    }
+    
+    .stat-card.inactive::before {
+      background: var(--gradient-solar);
+    }
+    
+    /* Ikon statistik yang lebih menarik */
+    .stat-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card.active .stat-icon {
+      color: var(--solar-green);
+    }
+    
+    .stat-card.inactive .stat-icon {
+      color: var(--solar-orange);
+    }
+    
+    .stat-card:hover .stat-icon {
+      transform: scale(1.1);
+    }
+    
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+    
+    .stat-card.active .stat-value {
+      background: var(--gradient-green);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-card.inactive .stat-value {
+      background: var(--gradient-solar);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    /* Level Tabs */
+    .level-tabs {
+      display: flex;
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 14px;
+      padding: 4px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .level-tab {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .level-tab.active {
+      background: var(--gradient-solar);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .level-tab:nth-child(2).active {
+      background: var(--gradient-green);
+    }
+    
+    .level-tab:nth-child(3).active {
+      background: var(--gradient-blue);
+    }
+    
+    .level-badge {
+      font-size: 11px;
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    
+    .level-tab.active .level-badge {
+      background: rgba(255,255,255,0.3);
+    }
+    
+    /* Section Title */
+    .section-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.5px;
+    }
+    
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 20px;
+      background: var(--gradient-solar);
+      border-radius: 2px;
+    }
+    
+    /* Team List */
+    .team-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .team-item {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .team-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .team-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--gradient-solar);
+    }
+    
+    .team-item.active::before {
+      background: var(--gradient-green);
+    }
+    
+    .team-item.inactive::before {
+      background: var(--gradient-solar);
+    }
+    
+    .team-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .team-phone {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .team-status {
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .status-active {
+      background: rgba(50, 215, 75, 0.15);
+      color: #32D74B;
+      border: 1px solid rgba(50, 215, 75, 0.3);
+    }
+    
+    .status-inactive {
+      background: rgba(255, 149, 0, 0.15);
+      color: #FF9500;
+      border: 1px solid rgba(255, 149, 0, 0.3);
+    }
+    
+    .team-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .team-level {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .team-level i {
+      color: var(--solar-orange);
+    }
+    
+    .team-date {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    
+    .empty-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .empty-description {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+    
+    .modal-content {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 32px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: var(--shadow-glow);
+      animation: modalAppear 0.4s ease;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .modal-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-solar);
+    }
+    
+    @keyframes modalAppear {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    
+    .modal-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      color: var(--solar-orange);
+    }
+    
+    .modal-title {
+      font-size: 24px;
+      margin-bottom: 12px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    
+    .modal-message {
+      margin-bottom: 24px;
+      color: var(--text-muted);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    
+    .modal-button {
+      background: var(--gradient-solar);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 32px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .modal-button:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+    
+    /* Loading states */
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 8px;
+    }
+    
+    @keyframes loading {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 380px) {
+      .stat-card {
+        padding: 16px;
+        min-height: 90px;
+      }
+      
+      .stat-value {
+        font-size: 22px;
+      }
+      
+      .team-item {
+        padding: 16px;
+      }
+      
+      .referral-link-container {
+        flex-direction: column;
+      }
+      
+      .share-buttons {
+        grid-template-columns: 1fr;
+      }
+      
+      .referral-code {
+        font-size: 20px;
+        letter-spacing: 2px;
+      }
+    }
+    
+    @media (max-width: 340px) {
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .level-tabs {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation">
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+  </div>
+
+  <header>
+    <div class="header-content">
+      <button class="back-button" onclick="goPage('dashboard.html')">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1 class="header-title">Tim Saya</h1>
+        <p class="header-subtitle">Kelola jaringan referral Anda</p>
+      </div>
+    </div>
+  </header>
+  
+  <main>
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-link"></i>
+        <span>Tautan Referral Anda</span>
+      </div>
+      <p style="color: var(--text-muted); margin-bottom: 16px; font-size: 14px;">
+        Bagikan tautan ini kepada teman-teman Anda untuk mendapatkan bonus referral
+      </p>
+      
+      <div class="referral-code" id="referralCode">LOADING</div>
+      
+      <div class="referral-link-container">
+        <input type="text" class="referral-link" id="referralLink" readonly value="Memuat tautan...">
+        <button class="copy-btn" id="copyBtn">
+          <i class="fas fa-copy"></i>
+          Salin
+        </button>
+      </div>
+      <div class="share-buttons">
+        <button class="share-btn share-whatsapp" onclick="shareToWhatsApp()">
+          <i class="fab fa-whatsapp"></i>
+          WhatsApp
+        </button>
+        <button class="share-btn share-telegram" onclick="shareToTelegram()">
+          <i class="fab fa-telegram"></i>
+          Telegram
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-chart-line"></i>
+        <span>Statistik Anggota Aktif</span>
+      </div>
+      <div class="stats-container">
+        <div class="stat-card active">
+          <i class="fas fa-user-check stat-icon"></i>
+          <div class="stat-value" id="level1Active">0</div>
+          <div class="stat-label">Level 1 Aktif</div>
+        </div>
+        <div class="stat-card active">
+          <i class="fas fa-user-friends stat-icon"></i>
+          <div class="stat-value" id="level2Active">0</div>
+          <div class="stat-label">Level 2 Aktif</div>
+        </div>
+        <div class="stat-card active">
+          <i class="fas fa-users stat-icon"></i>
+          <div class="stat-value" id="level3Active">0</div>
+          <div class="stat-label">Level 3 Aktif</div>
+        </div>
+      </div>
+      
+      <div class="card-title">
+        <i class="fas fa-users"></i>
+        <span>Statistik Anggota Tidak Aktif</span>
+      </div>
+      <div class="stats-container">
+        <div class="stat-card inactive">
+          <i class="fas fa-user-times stat-icon"></i>
+          <div class="stat-value" id="level1Inactive">0</div>
+          <div class="stat-label">Level 1 Tidak Aktif</div>
+        </div>
+        <div class="stat-card inactive">
+          <i class="fas fa-user-slash stat-icon"></i>
+          <div class="stat-value" id="level2Inactive">0</div>
+          <div class="stat-label">Level 2 Tidak Aktif</div>
+        </div>
+        <div class="stat-card inactive">
+          <i class="fas fa-user-alt-slash stat-icon"></i>
+          <div class="stat-value" id="level3Inactive">0</div>
+          <div class="stat-label">Level 3 Tidak Aktif</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-tabs">
+      <button class="level-tab active" onclick="showLevel('level1')">
+        <span>Level 1</span>
+        <span class="level-badge" id="level1Badge">0 anggota</span>
+      </button>
+      <button class="level-tab" onclick="showLevel('level2')">
+        <span>Level 2</span>
+        <span class="level-badge" id="level2Badge">0 anggota</span>
+      </button>
+      <button class="level-tab" onclick="showLevel('level3')">
+        <span>Level 3</span>
+        <span class="level-badge" id="level3Badge">0 anggota</span>
+      </button>
+    </div>
+
+    <section>
+      <h2 class="section-title">Anggota Tim</h2>
+      <div class="team-list" id="teamList">
+        <!-- Data tim akan dimuat di sini -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal untuk salin berhasil -->
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3 class="modal-title">Berhasil Disalin!</h3>
+      <p class="modal-message">Tautan referral telah disalin ke clipboard.</p>
+      <button class="modal-button" onclick="hideModal('success')">
+        Mengerti
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal untuk error -->
+  <div class="modal" id="errorModal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+      <h3 class="modal-title" id="errorTitle">Terjadi Kesalahan</h3>
+      <p class="modal-message" id="errorMessage">Terjadi kesalahan saat memuat data.</p>
+      <button class="modal-button" onclick="hideModal('error')">
+        Tutup
+      </button>
+    </div>
+  </div>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuJSxpcFZ1QI-dEsEnx2qSqlb0wsvs6Mc",
+      authDomain: "lginvest-776cf.firebaseapp.com",
+      databaseURL: "https://lginvest-776cf-default-rtdb.firebaseio.com",
+      projectId: "lginvest-776cf",
+      storageBucket: "lginvest-776cf.firebasestorage.app",
+      messagingSenderId: "831934282072",
+      appId: "1:831934282072:web:6a8b7a5bcba5d4d1264d2d",
+      measurementId: "G-265YF9DYCF"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let currentLevel = 'level1';
+    let teamData = {
+      level1: [],
+      level2: [],
+      level3: []
+    };
+
+    // Fungsi untuk sensor nomor HP (3-4 digit tengah)
+    function maskPhoneNumber(phone) {
+      if (!phone || phone.length < 8) return '***';
+      
+      const firstThree = phone.substring(0, 3);
+      const lastThree = phone.substring(phone.length - 3);
+      
+      // Tentukan berapa digit tengah yang akan disensor (3-4 digit)
+      const middleLength = phone.length - 6;
+      const stars = '*'.repeat(middleLength > 4 ? 4 : middleLength);
+      
+      return `${firstThree}${stars}${lastThree}`;
+    }
+
+    // Fungsi untuk memformat tanggal
+    function formatDate(timestamp) {
+      try {
+        const date = new Date(timestamp);
+        if (isNaN(date.getTime())) {
+          return 'Tanggal tidak valid';
+        }
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        
+        return `${day}/${month}/${year}`;
+      } catch (error) {
+        return 'Tanggal tidak valid';
+      }
+    }
+
+    // Fungsi untuk menampilkan loading skeleton
+    function showLoadingSkeleton() {
+      const teamList = document.getElementById('teamList');
+      teamList.innerHTML = '';
+      
+      for (let i = 0; i < 5; i++) {
+        const div = document.createElement('div');
+        div.className = 'team-item skeleton';
+        div.style.height = '100px';
+        teamList.appendChild(div);
+      }
+    }
+
+    // Fungsi untuk menampilkan error
+    function showError(title, message) {
+      document.getElementById('errorTitle').textContent = title;
+      document.getElementById('errorMessage').textContent = message;
+      document.getElementById('errorModal').style.display = 'flex';
+    }
+
+    // FUNGSI UTAMA: Memuat data tim dengan metode yang lebih robust
+    async function loadTeamData() {
+      const nohp = localStorage.getItem('nohp');
+      if (!nohp) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Tampilkan loading skeleton
+      showLoadingSkeleton();
+
+      try {
+        // Ambil data user untuk mendapatkan downline dan kode referral
+        const refUser = ref(db, 'users/' + nohp);
+        const snapUser = await get(refUser);
+        
+        if (!snapUser.exists()) {
+          window.location.href = 'index.html';
+          return;
+        }
+
+        const userData = snapUser.val();
+        
+        // Set kode referral dan tautan
+        const referralCode = userData.referral_code || 'TIDAK ADA';
+        
+        // Menggunakan format yang benar untuk tautan register
+        const baseUrl = window.location.origin + window.location.pathname;
+        const pathSegments = baseUrl.split('/');
+        pathSegments.pop(); // Hapus nama file saat ini (tim.html)
+        const basePath = pathSegments.join('/');
+        const referralLink = basePath + '/register.html?ref=' + referralCode;
+        
+        document.getElementById('referralCode').textContent = referralCode;
+        document.getElementById('referralLink').value = referralLink;
+
+        // Reset data
+        teamData = {
+          level1: [],
+          level2: [],
+          level3: []
+        };
+
+        // METODE UTAMA: Cari semua user yang memiliki referrer sama dengan kode referral user saat ini
+        await loadDownlineByReferrer(referralCode);
+
+        // Update statistics
+        updateStatistics();
+        
+        // Display current level
+        displayTeam(currentLevel);
+
+      } catch (error) {
+        console.error('Error loading team data:', error);
+        showError('Kesalahan Memuat Data', 'Terjadi kesalahan saat memuat data tim. Silakan coba lagi.');
+        showEmptyState();
+      }
+    }
+
+    // FUNGSI BARU: Memuat downline berdasarkan kode referrer
+    async function loadDownlineByReferrer(referralCode) {
+      try {
+        // Cari semua user yang memiliki referrer sama dengan kode referral user saat ini
+        const usersRef = ref(db, 'users');
+        const snapshot = await get(usersRef);
+        
+        if (snapshot.exists()) {
+          const allUsers = snapshot.val();
+          const downlineLevel1 = [];
+          const downlineLevel2 = [];
+          const downlineLevel3 = [];
+          
+          // Level 1: Langsung dari referrer
+          for (const [phone, userData] of Object.entries(allUsers)) {
+            if (userData.referrer === referralCode) {
+              const isActive = await checkUserActive(phone);
+              downlineLevel1.push({
+                nohp: phone,
+                level: 1,
+                isActive: isActive,
+                joinDate: userData.created_at || userData.join_date || new Date().toISOString()
+              });
+            }
+          }
+          
+          // Level 2: Dari downline Level 1
+          for (const level1User of downlineLevel1) {
+            for (const [phone, userData] of Object.entries(allUsers)) {
+              if (userData.referrer === level1User.nohp) {
+                const isActive = await checkUserActive(phone);
+                downlineLevel2.push({
+                  nohp: phone,
+                  level: 2,
+                  isActive: isActive,
+                  joinDate: userData.created_at || userData.join_date || new Date().toISOString()
+                });
+              }
+            }
+          }
+          
+          // Level 3: Dari downline Level 2
+          for (const level2User of downlineLevel2) {
+            for (const [phone, userData] of Object.entries(allUsers)) {
+              if (userData.referrer === level2User.nohp) {
+                const isActive = await checkUserActive(phone);
+                downlineLevel3.push({
+                  nohp: phone,
+                  level: 3,
+                  isActive: isActive,
+                  joinDate: userData.created_at || userData.join_date || new Date().toISOString()
+                });
+              }
+            }
+          }
+          
+          teamData.level1 = downlineLevel1;
+          teamData.level2 = downlineLevel2;
+          teamData.level3 = downlineLevel3;
+          
+          console.log('Downline data loaded:', {
+            level1: downlineLevel1.length,
+            level2: downlineLevel2.length,
+            level3: downlineLevel3.length
+          });
+        } else {
+          console.log('No users found in database');
+        }
+      } catch (error) {
+        console.error('Error loading downline by referrer:', error);
+        throw error;
+      }
+    }
+
+    // Fungsi untuk mengecek status aktif user
+    async function checkUserActive(nohp) {
+      try {
+        // Cek di purchases
+        const refPurchases = ref(db, 'purchases/' + nohp);
+        const snapPurchases = await get(refPurchases);
+        
+        // Cek juga di komisi untuk memastikan
+        const refCommissions = ref(db, 'commissions/' + nohp);
+        const snapCommissions = await get(refCommissions);
+        
+        return (snapPurchases.exists() && Object.keys(snapPurchases.val()).length > 0) ||
+               (snapCommissions.exists() && Object.keys(snapCommissions.val()).length > 0);
+      } catch (error) {
+        console.error(`Error checking active status for ${nohp}:`, error);
+        return false;
+      }
+    }
+
+    // Fungsi untuk update statistik aktif dan tidak aktif
+    function updateStatistics() {
+      // Hitung jumlah aktif dan tidak aktif per level
+      const level1Active = teamData.level1.filter(member => member.isActive).length;
+      const level2Active = teamData.level2.filter(member => member.isActive).length;
+      const level3Active = teamData.level3.filter(member => member.isActive).length;
+
+      const level1Inactive = teamData.level1.length - level1Active;
+      const level2Inactive = teamData.level2.length - level2Active;
+      const level3Inactive = teamData.level3.length - level3Active;
+
+      // Update statistik aktif
+      document.getElementById('level1Active').textContent = level1Active;
+      document.getElementById('level2Active').textContent = level2Active;
+      document.getElementById('level3Active').textContent = level3Active;
+
+      // Update statistik tidak aktif
+      document.getElementById('level1Inactive').textContent = level1Inactive;
+      document.getElementById('level2Inactive').textContent = level2Inactive;
+      document.getElementById('level3Inactive').textContent = level3Inactive;
+
+      // Update badges di tab
+      document.getElementById('level1Badge').textContent = `${teamData.level1.length} anggota`;
+      document.getElementById('level2Badge').textContent = `${teamData.level2.length} anggota`;
+      document.getElementById('level3Badge').textContent = `${teamData.level3.length} anggota`;
+    }
+
+    // Fungsi untuk menampilkan tim berdasarkan level
+    function displayTeam(level) {
+      const teamList = document.getElementById('teamList');
+      const members = teamData[level] || [];
+      
+      if (members.length === 0) {
+        showEmptyState(level);
+        return;
+      }
+
+      teamList.innerHTML = '';
+      
+      members.forEach(member => {
+        const div = document.createElement('div');
+        div.className = `team-item ${member.isActive ? 'active' : 'inactive'}`;
+        div.innerHTML = `
+          <div class="team-header">
+            <div class="team-phone">${maskPhoneNumber(member.nohp)}</div>
+            <div class="team-status ${member.isActive ? 'status-active' : 'status-inactive'}">
+              ${member.isActive ? 'Aktif' : 'Tidak Aktif'}
+            </div>
+          </div>
+          <div class="team-details">
+            <div class="team-level">
+              <i class="fas fa-layer-group"></i>
+              <span>Level ${member.level}</span>
+            </div>
+            <div class="team-date">${formatDate(member.joinDate)}</div>
+          </div>
+        `;
+        teamList.appendChild(div);
+      });
+    }
+
+    // Fungsi untuk menampilkan level yang dipilih
+    function showLevel(level) {
+      currentLevel = level;
+      
+      // Update active tab
+      document.querySelectorAll('.level-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Tampilkan tim
+      displayTeam(level);
+    }
+
+    function showEmptyState(level) {
+      const teamList = document.getElementById('teamList');
+      const levelText = level === 'level1' ? 'Level 1' : level === 'level2' ? 'Level 2' : 'Level 3';
+      
+      teamList.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="empty-title">Belum Ada Anggota</div>
+          <div class="empty-description">
+            Anda belum memiliki anggota di ${levelText}. Ajak teman untuk bergabung menggunakan tautan referral Anda.
+          </div>
+        </div>
+      `;
+    }
+
+    // Fungsi untuk copy referral link
+    function copyReferralLink() {
+      const referralLink = document.getElementById('referralLink');
+      const copyBtn = document.getElementById('copyBtn');
+      
+      referralLink.select();
+      referralLink.setSelectionRange(0, 99999); // For mobile devices
+      
+      try {
+        navigator.clipboard.writeText(referralLink.value).then(() => {
+          copyBtn.innerHTML = '<i class="fas fa-check"></i> Tersalin';
+          copyBtn.classList.add('copied');
+          showModal('success');
+          
+          setTimeout(() => {
+            copyBtn.innerHTML = '<i class="fas fa-copy"></i> Salin';
+            copyBtn.classList.remove('copied');
+          }, 2000);
+        });
+      } catch (err) {
+        // Fallback for older browsers
+        document.execCommand('copy');
+        copyBtn.innerHTML = '<i class="fas fa-check"></i> Tersalin';
+        copyBtn.classList.add('copied');
+        showModal('success');
+        
+        setTimeout(() => {
+          copyBtn.innerHTML = '<i class="fas fa-copy"></i> Salin';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      }
+    }
+
+    // Fungsi untuk berbagi ke WhatsApp (mengarah ke register.html)
+    function shareToWhatsApp() {
+      const referralLink = document.getElementById('referralLink').value;
+      const referralCode = document.getElementById('referralCode').textContent;
+      const message = `Halo! Saya ingin mengundang Anda untuk bergabung dengan Solar Energy. Daftar di: ${referralLink} dan gunakan kode referrer: ${referralCode}`;
+      
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+      
+      window.open(whatsappUrl, '_blank');
+    }
+
+    // Fungsi untuk berbagi ke Telegram (mengarah ke register.html)
+    function shareToTelegram() {
+      const referralLink = document.getElementById('referralLink').value;
+      const referralCode = document.getElementById('referralCode').textContent;
+      const message = `Halo! Saya ingin mengundang Anda untuk bergabung dengan Solar Energy. Daftar di: ${referralLink} dan gunakan kode referrer: ${referralCode}`;
+      
+      const encodedMessage = encodeURIComponent(message);
+      const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodedMessage}`;
+      
+      window.open(telegramUrl, '_blank');
+    }
+
+    // Fungsi untuk menampilkan modal
+    function showModal(modalType) {
+      document.getElementById(modalType + 'Modal').style.display = 'flex';
+    }
+
+    // Fungsi untuk menyembunyikan modal
+    function hideModal(modalType) {
+      document.getElementById(modalType + 'Modal').style.display = 'none';
+    }
+
+    // Fungsi navigasi langsung tanpa pemberitahuan
+    function goPage(page) {
+      window.location.href = page;
+    }
+
+    window.goPage = goPage;
+    window.showLevel = showLevel;
+    window.copyReferralLink = copyReferralLink;
+    window.shareToWhatsApp = shareToWhatsApp;
+    window.shareToTelegram = shareToTelegram;
+    window.hideModal = hideModal;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadTeamData();
+      
+      // Setup event listener for copy button
+      document.getElementById('copyBtn').addEventListener('click', copyReferralLink);
+    });
+  </script>
+</body>
+</html>

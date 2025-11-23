@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Solar Energy - Riwayat Transaksi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    :root {
+      --solar-orange: #FF9500;
+      --solar-yellow: #FFCC00;
+      --solar-blue: #5AC8FA;
+      --solar-green: #34C759;
+      --solar-red: #FF3B30;
+      --bg: #000000;
+      --card: rgba(255, 255, 255, 0.1);
+      --card-light: rgba(255, 255, 255, 0.15);
+      --text: #FFFFFF;
+      --text-muted: #8E8E93;
+      --border: rgba(255, 255, 255, 0.2);
+      --gradient-solar: linear-gradient(135deg, #FF9500, #FFCC00);
+      --gradient-solar-dark: linear-gradient(135deg, #E68500, #E6B800);
+      --gradient-blue: linear-gradient(135deg, #5AC8FA, #007AFF);
+      --gradient-green: linear-gradient(135deg, #34C759, #32D74B);
+      --gradient-dark: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+      --shadow-glow: 0 10px 30px rgba(255, 149, 0, 0.3);
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%);
+      filter: blur(40px);
+      animation: float 20s infinite linear;
+    }
+    
+    .bg-circle:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      left: 5%;
+      background: radial-gradient(circle, rgba(255, 149, 0, 0.1) 0%, rgba(255, 149, 0, 0) 70%);
+      animation-delay: 0s;
+    }
+    
+    .bg-circle:nth-child(2) {
+      width: 400px;
+      height: 400px;
+      top: 60%;
+      left: 80%;
+      background: radial-gradient(circle, rgba(255, 204, 0, 0.1) 0%, rgba(255, 204, 0, 0) 70%);
+      animation-delay: -5s;
+    }
+    
+    .bg-circle:nth-child(3) {
+      width: 250px;
+      height: 250px;
+      top: 30%;
+      left: 70%;
+      background: radial-gradient(circle, rgba(90, 200, 250, 0.1) 0%, rgba(90, 200, 250, 0) 70%);
+      animation-delay: -10s;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(20px, 20px) rotate(90deg);
+      }
+      50% {
+        transform: translate(0, 40px) rotate(180deg);
+      }
+      75% {
+        transform: translate(-20px, 20px) rotate(270deg);
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg);
+      }
+    }
+    
+    header {
+      background: var(--gradient-dark);
+      padding: 20px 16px 30px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: var(--gradient-solar);
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.15;
+      z-index: 0;
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .back-button {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .back-button:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateX(-3px);
+    }
+    
+    .header-text {
+      flex: 1;
+    }
+    
+    .header-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #FFFFFF, #E8E8E8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .header-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    
+    main {
+      padding: 20px 16px;
+      max-width: 1000px;
+      margin: auto;
+      padding-bottom: 80px;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-box {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .stat-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+    }
+    
+    .stat-box.deposit::before {
+      background: var(--gradient-green);
+    }
+    
+    .stat-box.withdraw::before {
+      background: var(--gradient-solar);
+    }
+    
+    .stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .stat-box.deposit .stat-value {
+      color: var(--solar-green);
+    }
+    
+    .stat-box.withdraw .stat-value {
+      color: var(--solar-orange);
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .stat-label i {
+      font-size: 12px;
+    }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 14px;
+      padding: 4px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .tab.active {
+      background: var(--gradient-solar);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    /* Transaction List */
+    .transaction-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .transaction-item {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .transaction-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .transaction-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    
+    .transaction-icon.deposit {
+      background: rgba(52, 199, 89, 0.2);
+      color: var(--solar-green);
+    }
+    
+    .transaction-icon.withdraw {
+      background: rgba(255, 149, 0, 0.2);
+      color: var(--solar-orange);
+    }
+    
+    .transaction-content {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .transaction-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    
+    .transaction-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    
+    .transaction-amount {
+      font-size: 16px;
+      font-weight: 700;
+      text-align: right;
+      white-space: nowrap;
+      margin-left: 10px;
+    }
+    
+    .transaction-amount.deposit {
+      color: var(--solar-green);
+    }
+    
+    .transaction-amount.withdraw {
+      color: var(--solar-orange);
+    }
+    
+    .transaction-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    .transaction-method {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    .transaction-date {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    
+    .status-success {
+      background: rgba(50, 215, 75, 0.2);
+      color: #32D74B;
+    }
+    
+    .status-pending {
+      background: rgba(255, 215, 0, 0.2);
+      color: #FFD700;
+    }
+    
+    .status-failed {
+      background: rgba(255, 59, 48, 0.2);
+      color: #FF3B30;
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    
+    .empty-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .empty-description {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 16px 0;
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+      z-index: 100;
+    }
+    
+    .nav-item {
+      background: none;
+      border: none;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+      padding: 10px 16px;
+      border-radius: 16px;
+      cursor: pointer;
+    }
+    
+    .nav-item.active {
+      color: var(--solar-orange);
+      font-weight: 700;
+      background: rgba(255, 149, 0, 0.15);
+    }
+    
+    .nav-icon {
+      font-size: 22px;
+      transition: transform 0.3s ease;
+    }
+    
+    .nav-item.active .nav-icon {
+      transform: scale(1.15);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .transaction-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      
+      .transaction-amount {
+        align-self: flex-end;
+        margin-left: 0;
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .stat-box {
+        padding: 16px;
+      }
+      
+      .stat-value {
+        font-size: 18px;
+      }
+      
+      .transaction-item {
+        padding: 14px;
+      }
+      
+      .transaction-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+      
+      .transaction-title {
+        font-size: 15px;
+      }
+      
+      .transaction-amount {
+        font-size: 15px;
+      }
+      
+      .transaction-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+    }
+    
+    @media (max-width: 340px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation">
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+  </div>
+
+  <header>
+    <div class="header-content">
+      <button class="back-button" onclick="goPage('profil.html')">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1 class="header-title">Riwayat Transaksi</h1>
+        <p class="header-subtitle">Deposit & Penarikan Saldo</p>
+      </div>
+    </div>
+  </header>
+  
+  <main>
+    <div class="stats-grid">
+      <div class="stat-box deposit">
+        <div class="stat-value" id="totalDeposit">Rp 0</div>
+        <div class="stat-label">
+          <i class="fas fa-arrow-down"></i>
+          Total Deposit
+        </div>
+      </div>
+      <div class="stat-box withdraw">
+        <div class="stat-value" id="totalWithdraw">Rp 0</div>
+        <div class="stat-label">
+          <i class="fas fa-arrow-up"></i>
+          Total Penarikan
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="filterTransactions('deposit')">Deposit</button>
+      <button class="tab" onclick="filterTransactions('withdraw')">Penarikan</button>
+    </div>
+
+    <div class="transaction-list" id="transactionList">
+      <!-- Data transaksi akan dimuat di sini -->
+    </div>
+  </main>
+  
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <div class="nav-item" onclick="goPage('dashboard.html')">
+      <i class="fas fa-home nav-icon"></i>
+      <span>Beranda</span>
+    </div>
+    <div class="nav-item" onclick="goPage('investasi.html')">
+      <i class="fas fa-chart-line nav-icon"></i>
+      <span>Investasi</span>
+    </div>
+    <div class="nav-item" onclick="goPage('undang.html')">
+      <i class="fas fa-share-alt nav-icon"></i>
+      <span>Undang</span>
+    </div>
+    <div class="nav-item" onclick="goPage('profil.html')">
+      <i class="fas fa-user nav-icon"></i>
+      <span>Profil</span>
+    </div>
+  </nav>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuJSxpcFZ1QI-dEsEnx2qSqlb0wsvs6Mc",
+      authDomain: "lginvest-776cf.firebaseapp.com",
+      databaseURL: "https://lginvest-776cf-default-rtdb.firebaseio.com",
+      projectId: "lginvest-776cf",
+      storageBucket: "lginvest-776cf.firebasestorage.app",
+      messagingSenderId: "831934282072",
+      appId: "1:831934282072:web:6a8b7a5bcba5d4d1264d2d",
+      measurementId: "G-265YF9DYCF"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let allTransactions = [];
+    let currentFilter = 'deposit';
+
+    function formatRupiah(n) {
+      return 'Rp ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    function formatDateTime(timestamp) {
+      try {
+        // Handle incomplete timestamp like "2025-11-17T12:55:"
+        if (timestamp && timestamp.length === 16) {
+          timestamp += '00'; // Add seconds if missing
+        }
+        
+        const date = new Date(timestamp);
+        if (isNaN(date.getTime())) {
+          return 'Tanggal tidak valid';
+        }
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        
+        return `${day}/${month}/${year} ${hours}:${minutes}`;
+      } catch (error) {
+        return 'Tanggal tidak valid';
+      }
+    }
+
+    function getStatusBadge(status) {
+      switch(status) {
+        case 'success':
+        case 'completed':
+          return '<span class="status-badge status-success">Berhasil</span>';
+        case 'pending':
+          return '<span class="status-badge status-pending">Pending</span>';
+        case 'failed':
+        case 'rejected':
+          return '<span class="status-badge status-failed">Gagal</span>';
+        default:
+          return '<span class="status-badge status-pending">Pending</span>';
+      }
+    }
+
+    function getTransactionIcon(type) {
+      if (type === 'deposit') {
+        return '<i class="fas fa-arrow-down"></i>';
+      } else {
+        return '<i class="fas fa-arrow-up"></i>';
+      }
+    }
+
+    // Fungsi untuk memuat data riwayat transaksi
+    async function loadTransactionHistory() {
+      const nohp = localStorage.getItem('nohp');
+      if (!nohp) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      console.log('Memuat riwayat transaksi untuk:', nohp);
+
+      try {
+        // Ambil data dari transactions dan withdrawals
+        const [transactionsSnap, withdrawalsSnap] = await Promise.all([
+          get(ref(db, 'transactions/' + nohp)),
+          get(ref(db, 'withdrawals/' + nohp))
+        ]);
+
+        allTransactions = [];
+        let totalDeposit = 0;
+        let totalWithdraw = 0;
+
+        // Process transactions data (deposit)
+        if (transactionsSnap.exists()) {
+          const transactionsData = transactionsSnap.val();
+          console.log('Data transaksi ditemukan:', transactionsData);
+          
+          for (const transactionId in transactionsData) {
+            const transaction = transactionsData[transactionId];
+            
+            if (transaction && transaction.amount !== undefined) {
+              const amount = parseInt(transaction.amount) || 0;
+              const type = transaction.type || 'deposit';
+              const status = transaction.status || 'pending';
+              const date = transaction.date || transaction.timestamp || new Date().toISOString();
+              
+              let title = 'Deposit Saldo';
+              let method = transaction.method || 'Transfer Bank';
+              
+              // Hitung total deposit yang berhasil saja
+              if (status === 'success' || status === 'completed') {
+                totalDeposit += amount;
+              }
+              
+              allTransactions.push({
+                id: transactionId,
+                type: type,
+                status: status,
+                title: title,
+                method: method,
+                amount: amount,
+                date: date,
+                timestamp: new Date(date).getTime() || Date.now()
+              });
+            }
+          }
+        }
+
+        // Process withdrawals data
+        if (withdrawalsSnap.exists()) {
+          const withdrawalsData = withdrawalsSnap.val();
+          console.log('Data penarikan ditemukan:', withdrawalsData);
+          
+          for (const withdrawalId in withdrawalsData) {
+            const withdrawal = withdrawalsData[withdrawalId];
+            
+            if (withdrawal && withdrawal.amount !== undefined) {
+              const amount = parseInt(withdrawal.amount) || 0;
+              const netAmount = parseInt(withdrawal.netAmount) || amount;
+              const type = 'withdraw';
+              const status = withdrawal.status || 'pending';
+              const date = withdrawal.date || new Date().toISOString();
+              
+              let title = 'Penarikan Saldo';
+              let method = 'Transfer Bank'; // Default method untuk withdrawal
+              
+              // Hitung total penarikan yang berhasil saja
+              if (status === 'success' || status === 'completed') {
+                totalWithdraw += amount;
+              }
+              
+              allTransactions.push({
+                id: withdrawalId,
+                type: type,
+                status: status,
+                title: title,
+                method: method,
+                amount: amount,
+                netAmount: netAmount,
+                fee: withdrawal.fee || 0,
+                date: date,
+                timestamp: new Date(date).getTime() || Date.now()
+              });
+            }
+          }
+        }
+
+        // Update statistics
+        document.getElementById('totalDeposit').textContent = formatRupiah(totalDeposit);
+        document.getElementById('totalWithdraw').textContent = formatRupiah(totalWithdraw);
+
+        // Sort by date (newest first)
+        allTransactions.sort((a, b) => b.timestamp - a.timestamp);
+
+        // Display transactions
+        displayTransactions(currentFilter);
+
+      } catch (error) {
+        console.error('Error loading transaction history:', error);
+        showEmptyState();
+      }
+    }
+
+    // Real-time listener untuk update otomatis
+    function setupRealTimeListener() {
+      const nohp = localStorage.getItem('nohp');
+      if (!nohp) return;
+
+      const refTransactions = ref(db, 'transactions/' + nohp);
+      const refWithdrawals = ref(db, 'withdrawals/' + nohp);
+      
+      onValue(refTransactions, (snapshot) => {
+        console.log('Real-time update transactions detected, reloading data...');
+        loadTransactionHistory();
+      });
+      
+      onValue(refWithdrawals, (snapshot) => {
+        console.log('Real-time update withdrawals detected, reloading data...');
+        loadTransactionHistory();
+      });
+    }
+
+    function showEmptyState() {
+      const transactionList = document.getElementById('transactionList');
+      transactionList.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="fas fa-exchange-alt"></i>
+          </div>
+          <div class="empty-title">Belum Ada Transaksi</div>
+          <div class="empty-description">
+            Anda belum memiliki riwayat transaksi. Lakukan deposit atau penarikan untuk melihat riwayat di sini.
+          </div>
+        </div>
+      `;
+    }
+
+    // Fungsi untuk menampilkan transaksi berdasarkan filter
+    function displayTransactions(filter) {
+      const transactionList = document.getElementById('transactionList');
+      
+      if (allTransactions.length === 0) {
+        showEmptyState();
+        return;
+      }
+
+      // Filter berdasarkan jenis transaksi
+      const filteredTransactions = allTransactions.filter(item => {
+        return item.type === filter;
+      });
+
+      if (filteredTransactions.length === 0) {
+        transactionList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <i class="fas fa-${filter === 'deposit' ? 'arrow-down' : 'arrow-up'}"></i>
+            </div>
+            <div class="empty-title">Tidak Ada ${filter === 'deposit' ? 'Deposit' : 'Penarikan'}</div>
+            <div class="empty-description">
+              Anda belum memiliki riwayat ${filter === 'deposit' ? 'deposit' : 'penarikan'}.
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      transactionList.innerHTML = '';
+      
+      filteredTransactions.forEach(item => {
+        const div = document.createElement('div');
+        div.className = `transaction-item`;
+        
+        // Format amount display untuk withdrawal (tampilkan netAmount jika ada)
+        const displayAmount = item.type === 'withdraw' && item.netAmount ? 
+          `${formatRupiah(item.netAmount)} <small style="color: var(--text-muted); font-size: 12px;">(Fee: ${formatRupiah(item.fee || 0)})</small>` : 
+          formatRupiah(item.amount);
+        
+        div.innerHTML = `
+          <div class="transaction-icon ${item.type}">
+            ${getTransactionIcon(item.type)}
+          </div>
+          <div class="transaction-content">
+            <div class="transaction-header">
+              <div class="transaction-title">${item.title}</div>
+              <div class="transaction-amount ${item.type}">
+                ${item.type === 'deposit' ? '+' : '-'}${displayAmount}
+              </div>
+            </div>
+            <div class="transaction-details">
+              <div class="transaction-method">
+                <i class="fas fa-wallet"></i>
+                ${item.method}
+              </div>
+              <div class="transaction-date">
+                <i class="far fa-clock"></i>
+                ${formatDateTime(item.date)}
+              </div>
+              ${getStatusBadge(item.status)}
+            </div>
+          </div>
+        `;
+        transactionList.appendChild(div);
+      });
+    }
+
+    // Fungsi untuk filter transaksi
+    function filterTransactions(filter) {
+      currentFilter = filter;
+      
+      // Update active tab
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Tampilkan transaksi yang difilter
+      displayTransactions(filter);
+    }
+
+    // Fungsi navigasi langsung tanpa pemberitahuan
+    function goPage(page) {
+      window.location.href = page;
+    }
+
+    window.goPage = goPage;
+    window.filterTransactions = filterTransactions;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadTransactionHistory();
+      setupRealTimeListener();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Solar Energy - Profil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    :root {
+      --solar-orange: #FF9500;
+      --solar-yellow: #FFCC00;
+      --solar-blue: #5AC8FA;
+      --solar-green: #34C759;
+      --solar-red: #FF3B30;
+      --bg: #000000;
+      --card: rgba(255, 255, 255, 0.1);
+      --card-light: rgba(255, 255, 255, 0.15);
+      --text: #FFFFFF;
+      --text-muted: #8E8E93;
+      --border: rgba(255, 255, 255, 0.2);
+      --gradient-solar: linear-gradient(135deg, #FF9500, #FFCC00);
+      --gradient-solar-dark: linear-gradient(135deg, #E68500, #E6B800);
+      --gradient-blue: linear-gradient(135deg, #5AC8FA, #007AFF);
+      --gradient-green: linear-gradient(135deg, #34C759, #32D74B);
+      --gradient-dark: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+      --shadow-glow: 0 10px 30px rgba(255, 149, 0, 0.3);
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+      font-size: 14px;
+    }
+    
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%);
+      filter: blur(40px);
+      animation: float 20s infinite linear;
+    }
+    
+    .bg-circle:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      left: 5%;
+      background: radial-gradient(circle, rgba(255, 149, 0, 0.1) 0%, rgba(255, 149, 0, 0) 70%);
+      animation-delay: 0s;
+    }
+    
+    .bg-circle:nth-child(2) {
+      width: 400px;
+      height: 400px;
+      top: 60%;
+      left: 80%;
+      background: radial-gradient(circle, rgba(255, 204, 0, 0.1) 0%, rgba(255, 204, 0, 0) 70%);
+      animation-delay: -5s;
+    }
+    
+    .bg-circle:nth-child(3) {
+      width: 250px;
+      height: 250px;
+      top: 30%;
+      left: 70%;
+      background: radial-gradient(circle, rgba(90, 200, 250, 0.1) 0%, rgba(90, 200, 250, 0) 70%);
+      animation-delay: -10s;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(20px, 20px) rotate(90deg);
+      }
+      50% {
+        transform: translate(0, 40px) rotate(180deg);
+      }
+      75% {
+        transform: translate(-20px, 20px) rotate(270deg);
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg);
+      }
+    }
+    
+    header {
+      background: var(--gradient-dark);
+      padding: 20px 16px 20px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: var(--gradient-solar);
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.15;
+      z-index: 0;
+    }
+    
+    .header-content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #FFFFFF, #E8E8E8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .header-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    
+    main {
+      padding: 20px 16px;
+      max-width: 1000px;
+      margin: auto;
+      padding-bottom: 80px;
+    }
+    
+    .profile-section {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 20px;
+      color: white;
+      box-shadow: var(--shadow-glow);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    
+    .profile-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-solar);
+    }
+    
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--gradient-solar);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      border: 4px solid rgba(255,255,255,0.2);
+      font-size: 40px;
+      color: white;
+      position: relative;
+      z-index: 1;
+      box-shadow: var(--shadow-glow);
+    }
+    
+    .profile-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+      letter-spacing: -0.3px;
+      word-break: break-all;
+      overflow-wrap: break-word;
+    }
+    
+    .profile-id {
+      font-size: 14px;
+      opacity: 0.8;
+      position: relative;
+      z-index: 1;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    
+    .stats-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      min-height: 90px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-solar);
+    }
+    
+    .stat-card:nth-child(2)::before {
+      background: var(--gradient-blue);
+    }
+    
+    .stat-card .label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    
+    .stat-card .value {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      word-break: break-all;
+      overflow-wrap: break-word;
+      line-height: 1.2;
+    }
+    
+    .stat-card:nth-child(1) .value {
+      background: var(--gradient-solar);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-card:nth-child(2) .value {
+      background: var(--gradient-blue);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* Upgrade Card */
+    .upgrade-card {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-glow);
+      color: white;
+      width: 100%;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      min-height: 100px;
+    }
+    
+    .upgrade-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-solar);
+      opacity: 0.1;
+    }
+    
+    .upgrade-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      background: var(--gradient-solar);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-glow);
+      border: 2px solid rgba(255,255,255,0.15);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .upgrade-icon i {
+      font-size: 28px;
+      color: white;
+    }
+    
+    .upgrade-text {
+      line-height: 1.3;
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .upgrade-title {
+      font-weight: 800;
+      font-size: 20px;
+      color: white;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+    
+    .upgrade-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.8);
+      font-weight: 500;
+    }
+    
+    .upgrade-btn {
+      background: var(--gradient-solar);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .upgrade-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+    
+    .action-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .action-btn {
+      padding: 16px;
+      border: none;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .action-btn.primary {
+      background: var(--gradient-solar);
+      color: white;
+    }
+    
+    .action-btn.secondary {
+      background: var(--gradient-blue);
+      color: white;
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.5px;
+    }
+    
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 20px;
+      background: var(--gradient-solar);
+      border-radius: 2px;
+    }
+    
+    .menu-list {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 0;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+    
+    .menu-item:hover {
+      background: rgba(255,255,255,0.05);
+      transform: translateX(5px);
+    }
+    
+    .menu-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--gradient-solar);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .menu-item:hover::before {
+      opacity: 1;
+    }
+    
+    .menu-item:nth-child(1)::before {
+      background: var(--gradient-solar);
+    }
+    
+    .menu-item:nth-child(2)::before {
+      background: var(--gradient-blue);
+    }
+    
+    .menu-item:nth-child(3)::before {
+      background: var(--gradient-green);
+    }
+    
+    .menu-item:nth-child(4)::before {
+      background: var(--gradient-solar);
+    }
+    
+    .menu-item:nth-child(5)::before {
+      background: var(--gradient-blue);
+    }
+    
+    .menu-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+      background: var(--gradient-solar);
+      color: white;
+      font-size: 18px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .menu-item:nth-child(1) .menu-icon {
+      background: var(--gradient-solar);
+    }
+    
+    .menu-item:nth-child(2) .menu-icon {
+      background: var(--gradient-blue);
+    }
+    
+    .menu-item:nth-child(3) .menu-icon {
+      background: var(--gradient-green);
+    }
+    
+    .menu-item:nth-child(4) .menu-icon {
+      background: var(--gradient-solar);
+    }
+    
+    .menu-item:nth-child(5) .menu-icon {
+      background: var(--gradient-blue);
+    }
+    
+    .menu-text {
+      flex: 1;
+    }
+    
+    .menu-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+    }
+    
+    .menu-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    .menu-arrow {
+      color: var(--text-muted);
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .menu-item:hover .menu-arrow {
+      color: var(--solar-orange);
+      transform: translateX(5px);
+    }
+    
+    .logout-section {
+      text-align: center;
+      margin-top: 24px;
+    }
+    
+    .logout-btn {
+      background: var(--gradient-solar);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 32px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .logout-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+    
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+    
+    .modal-content {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 24px;
+      max-width: 380px;
+      width: 90%;
+      text-align: center;
+      box-shadow: var(--shadow-glow);
+      animation: modalAppear 0.4s ease;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .modal-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-solar);
+    }
+    
+    @keyframes modalAppear {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    
+    .modal-icon {
+      font-size: 56px;
+      margin-bottom: 16px;
+      color: var(--solar-orange);
+    }
+    
+    .modal.error .modal-icon {
+      color: var(--solar-red);
+    }
+    
+    .modal.success .modal-icon {
+      color: var(--solar-green);
+    }
+    
+    .modal h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+    
+    .modal p {
+      margin-bottom: 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .modal-button {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+      font-size: 14px;
+    }
+    
+    .modal-button.primary {
+      background: var(--gradient-solar);
+      color: white;
+    }
+    
+    .modal-button.secondary {
+      background: rgba(255,255,255,0.1);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .modal-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 16px 0;
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+      z-index: 100;
+    }
+    
+    .nav-item {
+      background: none;
+      border: none;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+      padding: 10px 16px;
+      border-radius: 16px;
+      cursor: pointer;
+    }
+    
+    .nav-item.active {
+      color: var(--solar-orange);
+      font-weight: 700;
+      background: rgba(255, 149, 0, 0.15);
+    }
+    
+    .nav-icon {
+      font-size: 22px;
+      transition: transform 0.3s ease;
+    }
+    
+    .nav-item.active .nav-icon {
+      transform: scale(1.15);
+    }
+    
+    /* Loading Animation */
+    .loading-spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s ease-in-out infinite;
+      margin-right: 8px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 380px) {
+      .stat-card .value {
+        font-size: 18px;
+      }
+      
+      .stat-card {
+        padding: 16px;
+        min-height: 80px;
+      }
+      
+      .action-buttons {
+        grid-template-columns: 1fr;
+      }
+      
+      .menu-item {
+        padding: 16px;
+      }
+      
+      .profile-avatar {
+        width: 90px;
+        height: 90px;
+        font-size: 36px;
+      }
+      
+      .upgrade-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+      }
+      
+      .upgrade-btn {
+        width: 100%;
+      }
+    }
+    
+    @media (max-width: 340px) {
+      .stat-card .value {
+        font-size: 16px;
+      }
+      
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .menu-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+      }
+      
+      .menu-icon {
+        margin-right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation">
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+  </div>
+
+  <header>
+    <div class="header-content">
+      <h1 class="header-title">Profil</h1>
+      <p class="header-subtitle">Kelola akun dan pengaturan Anda</p>
+    </div>
+  </header>
+  
+  <main>
+    <div class="profile-section">
+      <div class="profile-avatar">
+        <i class="fas fa-user"></i>
+      </div>
+      <div class="profile-name" id="userName">Loading...</div>
+      <div class="profile-id" id="userId">Solar ID: Loading...</div>
+    </div>
+
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="label">Saldo Total</div>
+        <div class="value" id="saldoTotal">Rp 0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Investasi</div>
+        <div class="value" id="totalInvestasi">Rp 0</div>
+      </div>
+    </div>
+
+    <!-- Upgrade Card -->
+    <div class="upgrade-card">
+      <div class="upgrade-icon">
+        <i class="fas fa-crown"></i>
+      </div>
+      <div class="upgrade-text">
+        <div class="upgrade-title">Upgrade Akun</div>
+        <div class="upgrade-desc">Naikkan limit dan dapatkan keuntungan lebih</div>
+      </div>
+      <button class="upgrade-btn" onclick="goPage('upgrade.html')">Upgrade</button>
+    </div>
+
+    <div class="action-buttons">
+      <button class="action-btn primary" onclick="goPage('deposit.html')">
+        <i class="fas fa-wallet"></i>
+        Isi Ulang
+      </button>
+      <button class="action-btn secondary" onclick="goPage('tarik.html')">
+        <i class="fas fa-money-bill-wave"></i>
+        Penarikan
+      </button>
+    </div>
+
+    <section class="account-section">
+      <h2 class="section-title">Akun & Investasi</h2>
+      <div class="menu-list">
+        <div class="menu-item" onclick="goPage('program-referral.html')">
+          <div class="menu-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="menu-text">
+            <div class="menu-title">Program Referral</div>
+            <div class="menu-desc">Undang teman dan dapatkan komisi</div>
+          </div>
+          <div class="menu-arrow">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+        </div>
+        <div class="menu-item" onclick="goPage('bank.html')">
+          <div class="menu-icon">
+            <i class="fas fa-university"></i>
+          </div>
+          <div class="menu-text">
+            <div class="menu-title">Kelola Bank</div>
+            <div class="menu-desc">Tambah dan kelola rekening bank</div>
+          </div>
+          <div class="menu-arrow">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+        </div>
+        <div class="menu-item" onclick="goPage('riwayat.html')">
+          <div class="menu-icon">
+            <i class="fas fa-history"></i>
+          </div>
+          <div class="menu-text">
+            <div class="menu-title">Riwayat Transaksi</div>
+            <div class="menu-desc">Lihat semua riwayat transaksi</div>
+          </div>
+          <div class="menu-arrow">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+        </div>
+        <div class="menu-item" onclick="goPage('riwayat-pendapatan.html')">
+          <div class="menu-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="menu-text">
+            <div class="menu-title">Riwayat Pendapatan</div>
+            <div class="menu-desc">Lihat semua pendapatan Anda</div>
+          </div>
+          <div class="menu-arrow">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+        </div>
+        <div class="menu-item" onclick="goPage('komisi.html')">
+          <div class="menu-icon">
+            <i class="fas fa-money-bill-alt"></i>
+          </div>
+          <div class="menu-text">
+            <div class="menu-title">Riwayat Komisi</div>
+            <div class="menu-desc">Lihat riwayat komisi dari referral</div>
+          </div>
+          <div class="menu-arrow">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="support-section">
+      <h2 class="section-title">Bantuan & Dukungan</h2>
+      <div class="menu-list">
+        <div class="menu-item" onclick="goPage('online.html')">
+          <div class="menu-icon">
+            <i class="fas fa-headset"></i>
+          </div>
+          <div class="menu-text">
+            <div class="menu-title">Hubungi Kami</div>
+            <div class="menu-desc">Butuh bantuan? Hubungi tim support</div>
+          </div>
+          <div class="menu-arrow">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+        </div>
+        <div class="menu-item" onclick="showModal('tentang')">
+          <div class="menu-icon">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          <div class="menu-text">
+            <div class="menu-title">Tentang Aplikasi</div>
+            <div class="menu-desc">Informasi versi dan kebijakan privasi</div>
+          </div>
+          <div class="menu-arrow">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="logout-section">
+      <button class="logout-btn" onclick="showModal('logout')">
+        <i class="fas fa-sign-out-alt"></i>
+        Keluar
+      </button>
+    </div>
+  </main>
+  
+  <!-- Modal untuk Logout -->
+  <div class="modal" id="logoutModal">
+    <div class="modal-content">
+      <i class="fas fa-sign-out-alt modal-icon"></i>
+      <h3>Konfirmasi Keluar</h3>
+      <p>Apakah Anda yakin ingin keluar dari akun Anda?</p>
+      <div class="modal-buttons">
+        <button class="modal-button secondary" onclick="hideModal('logout')">Batal</button>
+        <button class="modal-button primary" onclick="logout()">Ya, Keluar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal untuk Hubungi Kami -->
+  <div class="modal" id="hubungiModal">
+    <div class="modal-content">
+      <i class="fas fa-headset modal-icon"></i>
+      <h3>Hubungi Kami</h3>
+      <p>Untuk bantuan dan dukungan, silakan hubungi:</p>
+      <p><strong>Email:</strong> support@solar-energy.com</p>
+      <p><strong>Telepon:</strong> +62 812-3456-7890</p>
+      <p><strong>WhatsApp:</strong> +62 812-3456-7890</p>
+      <div class="modal-buttons">
+        <button class="modal-button primary" onclick="hideModal('hubungi')">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal untuk Tentang Aplikasi -->
+  <div class="modal" id="tentangModal">
+    <div class="modal-content">
+      <i class="fas fa-info-circle modal-icon"></i>
+      <h3>Tentang Aplikasi</h3>
+      <p><strong>Solar Energy</strong></p>
+      <p>Versi: 2.1.0</p>
+      <p>Platform investasi energi surya terdepan dengan teknologi keamanan terkini.</p>
+      <p><strong>Fitur Terbaru:</strong></p>
+      <ul style="text-align: left; margin: 10px 0; padding-left: 20px;">
+        <li>System investasi yang lebih stabil</li>
+        <li>Keamanan data dengan enkripsi end-to-end</li>
+        <li>Antarmuka yang lebih responsif</li>
+        <li>Laporan keuangan real-time</li>
+      </ul>
+      <p style="margin-top: 10px;">© 2024 Solar Energy. All rights reserved.</p>
+      <div class="modal-buttons">
+        <button class="modal-button primary" onclick="hideModal('tentang')">Tutup</button>
+      </div>
+    </div>
+  </div>
+  
+  <nav class="bottom-nav">
+    <div class="nav-item" onclick="goPage('dashboard.html')">
+      <i class="fas fa-home nav-icon"></i>
+      <span>Beranda</span>
+    </div>
+    <div class="nav-item" onclick="goPage('investasi.html')">
+      <i class="fas fa-chart-line nav-icon"></i>
+      <span>Investasi</span>
+    </div>
+    <div class="nav-item" onclick="goPage('undang.html')">
+      <i class="fas fa-share-alt nav-icon"></i>
+      <span>Undang</span>
+    </div>
+    <div class="nav-item active" onclick="goPage('profil.html')">
+      <i class="fas fa-user nav-icon"></i>
+      <span>Profil</span>
+    </div>
+  </nav>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuJSxpcFZ1QI-dEsEnx2qSqlb0wsvs6Mc",
+      authDomain: "lginvest-776cf.firebaseapp.com",
+      databaseURL: "https://lginvest-776cf-default-rtdb.firebaseio.com",
+      projectId: "lginvest-776cf",
+      storageBucket: "lginvest-776cf.firebasestorage.app",
+      messagingSenderId: "831934282072",
+      appId: "1:831934282072:web:6a8b7a5bcba5d4d1264d2d",
+      measurementId: "G-265YF9DYCF"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    function formatRupiah(n) {
+      return 'Rp ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    // Fungsi untuk memuat data profil user
+    async function loadProfileData() {
+      const nohp = localStorage.getItem('nohp');
+      if (!nohp) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      try {
+        // Ambil data user
+        const refUser = ref(db, 'users/' + nohp);
+        
+        // Gunakan onValue untuk real-time updates
+        onValue(refUser, (snapshot) => {
+          if (!snapshot.exists()) {
+            window.location.href = 'index.html';
+            return;
+          }
+
+          const userData = snapshot.val();
+          
+          // Tampilkan data profil
+          document.getElementById('userName').textContent = userData.nohp;
+          document.getElementById('userId').textContent = `Solar ID: ${userData.nohp}`;
+          document.getElementById('saldoTotal').textContent = formatRupiah(userData.saldo || 0);
+
+          // Hitung total investasi (total semua pembelian aktif)
+          const refPurchases = ref(db, 'purchases/' + nohp);
+          
+          onValue(refPurchases, (snapPurchases) => {
+            let totalInvestasi = 0;
+            
+            if (snapPurchases.exists()) {
+              const purchases = snapPurchases.val();
+              const produkList = [
+                { kode: 'A', harga: 100000 },
+                { kode: 'B', harga: 200000 },
+                { kode: 'C', harga: 350000 },
+                { kode: 'D', harga: 500000 },
+                { kode: 'E', harga: 850000 },
+                { kode: 'F', harga: 1000000 },
+                { kode: 'G', harga: 1500000 },
+                { kode: 'H', harga: 2000000 },
+                { kode: 'I', harga: 3000000 },
+                { kode: 'J', harga: 5000000 }
+              ];
+              
+              for (const kode in purchases) {
+                const purchase = purchases[kode];
+                const produk = produkList.find(p => p.kode === kode);
+                if (produk && purchase.status === 'active') {
+                  totalInvestasi += produk.harga;
+                }
+              }
+            }
+
+            document.getElementById('totalInvestasi').textContent = formatRupiah(totalInvestasi);
+          });
+
+        }, {
+          onlyOnce: false // Listen for changes, not just once
+        });
+
+      } catch (error) {
+        console.error('Error memuat data profil:', error);
+      }
+    }
+
+    // Fungsi untuk menampilkan modal
+    function showModal(modalType) {
+      document.getElementById(modalType + 'Modal').style.display = 'flex';
+    }
+
+    // Fungsi untuk menyembunyikan modal
+    function hideModal(modalType) {
+      document.getElementById(modalType + 'Modal').style.display = 'none';
+    }
+
+    // Fungsi untuk logout
+    function logout() {
+      localStorage.removeItem('nohp');
+      window.location.href = 'index.html';
+    }
+
+    // Fungsi navigasi langsung tanpa pemberitahuan
+    function goPage(page) {
+      window.location.href = page;
+    }
+
+    window.goPage = goPage;
+    window.showModal = showModal;
+    window.hideModal = hideModal;
+    window.logout = logout;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadProfileData();
+    });
+  </script>
+</body>
+</html>
