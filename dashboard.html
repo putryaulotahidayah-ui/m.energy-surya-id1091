@@ -1156,7 +1156,8 @@
       currentProductData = { kode, harga, namaProduk };
       
       // Set pesan konfirmasi
-      confirmMessage.textContent = `Apakah anda yakin ingin membeli ${namaProduk} seharga ${formatRupiah(harga)}?`;
+      const produk = produkList.find(p => p.kode === kode);
+      confirmMessage.textContent = `Apakah anda yakin ingin membeli ${namaProduk} seharga ${formatRupiah(harga)}?\n\nProfit hari pertama ${formatRupiah(produk.profitPerhari)} akan otomatis masuk ke saldo Anda.`;
       
       // Show modal
       modal.style.display = 'flex';
@@ -1233,6 +1234,54 @@
           }
         }
       });
+    }
+
+    // Fungsi untuk langsung menarik profit setelah pembelian
+    async function tarikProfitSetelahBeli(kode, namaProduk) {
+      const nohp = localStorage.getItem('nohp');
+      if (!nohp) return;
+
+      try {
+        // Ambil data purchase yang baru saja dibuat
+        const refPurchase = ref(db, 'purchases/' + nohp + '/' + kode);
+        const snapPurchase = await get(refPurchase);
+        
+        if (!snapPurchase.exists()) return;
+
+        const purchase = snapPurchase.val();
+        const produk = produkList.find(p => p.kode === kode);
+        
+        if (!produk) return;
+
+        // Hitung profit yang bisa langsung ditarik (1 hari pertama)
+        const profitHariPertama = produk.profitPerHari;
+        
+        // Tambahkan saldo user dengan profit hari pertama
+        const refUser = ref(db, 'users/' + nohp);
+        const snapUser = await get(refUser);
+        
+        if (!snapUser.exists()) return;
+
+        const userData = snapUser.val();
+        const saldoSekarang = userData.saldo || 0;
+        
+        const updates = {};
+        updates['/users/' + nohp + '/saldo'] = saldoSekarang + profitHariPertama;
+        
+        // Update last_withdraw dan total_withdrawn untuk purchase baru
+        const sekarangISO = new Date().toISOString();
+        
+        updates['/purchases/' + nohp + '/' + kode + '/last_withdraw'] = sekarangISO;
+        updates['/purchases/' + nohp + '/' + kode + '/total_withdrawn'] = profitHariPertama;
+        updates['/purchases/' + nohp + '/' + kode + '/auto_withdrawn'] = true; // Flag untuk penarikan otomatis
+
+        await update(ref(db), updates);
+        
+        console.log(`Profit hari pertama ${formatRupiah(profitHariPertama)} berhasil ditarik untuk ${namaProduk}`);
+        
+      } catch (error) {
+        console.error('Error menarik profit otomatis:', error);
+      }
     }
 
     // Fungsi konfirmasi pembelian
@@ -1377,7 +1426,13 @@
         await update(ref(db), updates);
 
         // Tampilkan pesan sukses - PERBAIKAN: Halaman akan otomatis refresh
-        showModal('Pembelian Berhasil', `PAKET ${namaProduk.toUpperCase()} BERHASIL DIBELI!\n\nProfit akan masuk setiap hari ke dompet akun Anda.`, 'success');
+        const produk = produkList.find(p => p.kode === kode);
+        showModal('Pembelian Berhasil', `PAKET ${namaProduk.toUpperCase()} BERHASIL DIBELI!\n\nProfit hari pertama ${formatRupiah(produk.profitPerhari)} sudah otomatis ditarik ke saldo Anda.`, 'success');
+        
+        // TARIK PROFIT OTOMATIS SETELAH PEMBELIAN BERHASIL
+        setTimeout(() => {
+          tarikProfitSetelahBeli(kode, namaProduk);
+        }, 1000);
         
         // Reset button setelah sukses
         setTimeout(() => {
