@@ -1219,7 +1219,7 @@
       }
     }
 
-    // Fungsi untuk menghitung profit yang tersedia untuk ditarik
+    // MODIFIKASI: Fungsi untuk menghitung profit yang tersedia untuk ditarik
     function hitungProfitTersedia(purchase, produk, sisaHari) {
       // Jika masa aktif sudah habis, tidak ada profit
       if (sisaHari <= 0) {
@@ -1234,14 +1234,10 @@
         const tanggalBeli = new Date(purchase.tanggal);
         const selisihJam = Math.floor((sekarang - tanggalBeli) / (1000 * 60 * 60));
         
-        // Minimal 24 jam sejak pembelian untuk bisa tarik pertama kali
-        if (selisihJam < 24) {
-          return 0;
-        }
-        
+        // MODIFIKASI: Bisa tarik langsung tanpa menunggu 24 jam
         // Hitung berapa hari sudah berlalu sejak pembelian (maksimal sesuai sisa hari)
         const hariBerlalu = Math.floor(selisihJam / 24);
-        const hariYangBisaDitarik = Math.min(hariBerlalu, produk.masaAktif - sisaHari);
+        const hariYangBisaDitarik = Math.min(hariBerlalu + 1, produk.masaAktif - sisaHari); // +1 untuk hari ini
         
         return profitPerHari * hariYangBisaDitarik;
       }
@@ -1250,7 +1246,7 @@
       const lastWithdraw = new Date(purchase.last_withdraw);
       const selisihJam = Math.floor((sekarang - lastWithdraw) / (1000 * 60 * 60));
       
-      // Minimal 24 jam sejak penarikan terakhir
+      // MODIFIKASI: Minimal 24 jam sejak penarikan terakhir
       if (selisihJam < 24) {
         return 0;
       }
@@ -1262,29 +1258,20 @@
       return profitPerHari * hariYangBisaDitarik;
     }
 
-    // Fungsi untuk menghitung kapan user bisa tarik profit berikutnya
+    // MODIFIKASI: Fungsi untuk menghitung kapan user bisa tarik profit berikutnya
     function hitungWaktuTarikBerikutnya(purchase, produk, sisaHari) {
       const sekarang = new Date();
       
-      // Jika belum pernah tarik
+      // Jika belum pernah tarik, bisa tarik langsung
       if (!purchase.last_withdraw) {
-        const tanggalBeli = new Date(purchase.tanggal);
-        const selisihJam = Math.floor((sekarang - tanggalBeli) / (1000 * 60 * 60));
-        
-        if (selisihJam < 24) {
-          // Hitung jam tersisa sampai bisa tarik pertama kali
-          const jamTersisa = 24 - selisihJam;
-          const waktuTarik = new Date(tanggalBeli.getTime() + 24 * 60 * 60 * 1000);
-          return `Bisa tarik: ${formatDateTime(waktuTarik)} (${jamTersisa} jam lagi)`;
-        } else {
-          return 'Sekarang bisa tarik';
-        }
+        return 'Sekarang bisa tarik';
       }
       
       // Jika sudah pernah tarik
       const lastWithdraw = new Date(purchase.last_withdraw);
       const selisihJam = Math.floor((sekarang - lastWithdraw) / (1000 * 60 * 60));
       
+      // MODIFIKASI: Minimal 24 jam sejak penarikan terakhir
       if (selisihJam < 24) {
         // Hitung jam tersisa sampai bisa tarik lagi
         const jamTersisa = 24 - selisihJam;
@@ -1298,7 +1285,7 @@
     // Variabel untuk mencegah double click
     let isProcessing = false;
 
-    // Fungsi untuk menarik profit
+    // MODIFIKASI: Fungsi untuk menarik profit
     async function tarikProfit(kode, namaProduk) {
       // Cegah double click
       if (isProcessing) {
@@ -1352,7 +1339,15 @@
         const profitTersedia = hitungProfitTersedia(purchase, produk, sisaHari);
         
         if (profitTersedia === 0) {
-          showModal('Belum Bisa Tarik', `Profit untuk ${namaProduk} belum tersedia untuk ditarik. Coba lagi nanti.`, 'error');
+          // MODIFIKASI: Berikan pesan yang lebih spesifik
+          if (purchase.last_withdraw) {
+            const lastWithdraw = new Date(purchase.last_withdraw);
+            const selisihJam = Math.floor((sekarang - lastWithdraw) / (1000 * 60 * 60));
+            const jamTersisa = 24 - selisihJam;
+            showModal('Belum Bisa Tarik', `Anda baru saja menarik profit. Bisa tarik lagi dalam ${jamTersisa} jam.`, 'error');
+          } else {
+            showModal('Belum Bisa Tarik', `Profit untuk ${namaProduk} belum tersedia untuk ditarik.`, 'error');
+          }
           isProcessing = false;
           return;
         }
