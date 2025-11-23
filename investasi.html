@@ -1219,7 +1219,7 @@
       }
     }
 
-    // FUNGSI PERBAIKAN: Hitung profit yang tersedia untuk ditarik - VERSI DIPERBAIKI
+    // Fungsi untuk menghitung profit yang tersedia untuk ditarik
     function hitungProfitTersedia(purchase, produk, sisaHari) {
       // Jika masa aktif sudah habis, tidak ada profit
       if (sisaHari <= 0) {
@@ -1228,54 +1228,88 @@
       
       const profitPerHari = produk.profitPerHari;
       const sekarang = new Date();
-      const tanggalBeli = new Date(purchase.tanggal);
       
-      // Hitung berapa hari sudah berlalu sejak pembelian
-      const selisihHari = Math.floor((sekarang - tanggalBeli) / (1000 * 60 * 60 * 24));
+      // PERBAIKAN: Jika sudah ada penarikan otomatis (auto_withdrawn), hitung dari last_withdraw
+      if (purchase.auto_withdrawn && purchase.last_withdraw) {
+        const lastWithdraw = new Date(purchase.last_withdraw);
+        const selisihJam = Math.floor((sekarang - lastWithdraw) / (1000 * 60 * 60));
+        
+        // Jika sudah lewat 24 jam sejak penarikan otomatis
+        if (selisihJam >= 24) {
+          const hariBerlalu = Math.floor(selisihJam / 24);
+          const hariYangBisaDitarik = Math.min(hariBerlalu, sisaHari);
+          
+          return profitPerHari * hariYangBisaDitarik;
+        } else {
+          return 0; // Belum 24 jam, belum bisa tarik lagi
+        }
+      }
       
-      // Pastikan tidak melebihi masa aktif
-      const hariEfektif = Math.min(selisihHari, produk.masaAktif);
+      // Jika belum pernah tarik sama sekali
+      if (!purchase.last_withdraw) {
+        const tanggalBeli = new Date(purchase.tanggal);
+        const selisihJam = Math.floor((sekarang - tanggalBeli) / (1000 * 60 * 60));
+        
+        // PERBAIKAN: Profit hari pertama sudah ditarik otomatis, jadi hitung dari hari kedua
+        const hariBerlalu = Math.floor(selisihJam / 24);
+        const hariYangBisaDitarik = Math.max(0, hariBerlalu - 1); // Kurangi 1 karena hari pertama sudah ditarik
+        
+        return profitPerHari * hariYangBisaDitarik;
+      }
       
-      // Hitung total profit yang seharusnya sudah diterima
-      const totalProfitSeharusnya = profitPerHari * hariEfektif;
+      // Jika sudah pernah tarik (manual)
+      const lastWithdraw = new Date(purchase.last_withdraw);
+      const selisihJam = Math.floor((sekarang - lastWithdraw) / (1000 * 60 * 60));
       
-      // Kurangi dengan yang sudah ditarik
-      const sudahDitarik = purchase.total_withdrawn || 0;
+      // Minimal 24 jam sejak penarikan terakhir
+      if (selisihJam < 24) {
+        return 0;
+      }
       
-      // Profit tersedia = total yang seharusnya - yang sudah ditarik
-      const profitTersedia = totalProfitSeharusnya - sudahDitarik;
+      // Hitung berapa hari sudah berlalu sejak penarikan terakhir (maksimal sesuai sisa hari)
+      const hariBerlalu = Math.floor(selisihJam / 24);
+      const hariYangBisaDitarik = Math.min(hariBerlalu, sisaHari);
       
-      // Pastikan tidak negatif
-      return Math.max(0, profitTersedia);
+      return profitPerHari * hariYangBisaDitarik;
     }
 
-    // FUNGSI PERBAIKAN: Hitung kapan user bisa tarik profit berikutnya - VERSI DIPERBAIKI
+    // Fungsi untuk menghitung kapan user bisa tarik profit berikutnya
     function hitungWaktuTarikBerikutnya(purchase, produk, sisaHari) {
       const sekarang = new Date();
       
-      // Untuk investasi aktif, selalu bisa tarik asalkan ada profit tersedia
-      const profitTersedia = hitungProfitTersedia(purchase, produk, sisaHari);
-      
-      if (profitTersedia > 0) {
-        return 'Bisa tarik sekarang';
-      } else {
-        // Jika belum ada profit, hitung kapan akan ada profit
+      // Jika belum pernah tarik
+      if (!purchase.last_withdraw) {
         const tanggalBeli = new Date(purchase.tanggal);
-        const selisihHari = Math.floor((sekarang - tanggalBeli) / (1000 * 60 * 60 * 24));
+        const selisihJam = Math.floor((sekarang - tanggalBeli) / (1000 * 60 * 60));
         
-        if (selisihHari < 1) {
-          const jamTersisa = 24 - Math.floor((sekarang - tanggalBeli) / (1000 * 60 * 60));
-          return `Profit pertama: ${jamTersisa} jam lagi`;
+        if (selisihJam < 24) {
+          // Hitung jam tersisa sampai bisa tarik pertama kali
+          const jamTersisa = 24 - selisihJam;
+          const waktuTarik = new Date(tanggalBeli.getTime() + 24 * 60 * 60 * 1000);
+          return `Bisa tarik: ${formatDateTime(waktuTarik)} (${jamTersisa} jam lagi)`;
         } else {
-          return 'Tunggu profit hari berikutnya';
+          return 'Sekarang bisa tarik';
         }
+      }
+      
+      // Jika sudah pernah tarik
+      const lastWithdraw = new Date(purchase.last_withdraw);
+      const selisihJam = Math.floor((sekarang - lastWithdraw) / (1000 * 60 * 60));
+      
+      if (selisihJam < 24) {
+        // Hitung jam tersisa sampai bisa tarik lagi
+        const jamTersisa = 24 - selisihJam;
+        const waktuTarik = new Date(lastWithdraw.getTime() + 24 * 60 * 60 * 1000);
+        return `Bisa tarik: ${formatDateTime(waktuTarik)} (${jamTersisa} jam lagi)`;
+      } else {
+        return 'Sekarang bisa tarik';
       }
     }
 
     // Variabel untuk mencegah double click
     let isProcessing = false;
 
-    // FUNGSI PERBAIKAN: Tarik profit - VERSI DIPERBAIKI
+    // Fungsi untuk menarik profit
     async function tarikProfit(kode, namaProduk) {
       // Cegah double click
       if (isProcessing) {
@@ -1325,11 +1359,11 @@
           return;
         }
 
-        // Hitung profit yang tersedia - PAKAI FUNGSI YANG BARU
+        // Hitung profit yang tersedia
         const profitTersedia = hitungProfitTersedia(purchase, produk, sisaHari);
         
         if (profitTersedia === 0) {
-          showModal('Belum Ada Profit', `Belum ada profit yang bisa ditarik untuk ${namaProduk}. Profit akan bertambah setiap hari.`, 'error');
+          showModal('Belum Bisa Tarik', `Profit untuk ${namaProduk} belum tersedia untuk ditarik. Coba lagi nanti.`, 'error');
           isProcessing = false;
           return;
         }
@@ -1356,9 +1390,10 @@
         
         updates['/purchases/' + nohp + '/' + kode + '/last_withdraw'] = sekarangISO;
         updates['/purchases/' + nohp + '/' + kode + '/total_withdrawn'] = totalWithdrawn;
+        updates['/purchases/' + nohp + '/' + kode + '/auto_withdrawn'] = false; // Set false karena ini penarikan manual
 
         await update(ref(db), updates);
-        showModal('Berhasil', `Profit sebesar ${formatRupiah(profitTersedia)} berhasil ditarik dari ${namaProduk}. Saldo Anda telah bertambah.`, 'success');
+        showModal('Berhasil', `Profit sebesar ${formatRupiah(profitTersedia)} berhasil ditarik dari ${namaProduk}. Sisa masa aktif: ${sisaHari} hari`, 'success');
         
       } catch (error) {
         console.error('Error menarik profit:', error);
