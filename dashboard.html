@@ -1236,7 +1236,7 @@
       });
     }
 
-    // Fungsi untuk langsung menarik profit setelah pembelian
+    // PERBAIKAN: Fungsi untuk langsung menarik profit setelah pembelian
     async function tarikProfitSetelahBeli(kode, namaProduk) {
       const nohp = localStorage.getItem('nohp');
       if (!nohp) return;
@@ -1254,7 +1254,7 @@
         if (!produk) return;
 
         // Hitung profit yang bisa langsung ditarik (1 hari pertama)
-        const profitHariPertama = produk.profitPerHari;
+        const profitHariPertama = produk.profitPerhari;
         
         // Tambahkan saldo user dengan profit hari pertama
         const refUser = ref(db, 'users/' + nohp);
@@ -1429,7 +1429,7 @@
         const produk = produkList.find(p => p.kode === kode);
         showModal('Pembelian Berhasil', `PAKET ${namaProduk.toUpperCase()} BERHASIL DIBELI!\n\nProfit hari pertama ${formatRupiah(produk.profitPerhari)} sudah otomatis ditarik ke saldo Anda.`, 'success');
         
-        // TARIK PROFIT OTOMATIS SETELAH PEMBELIAN BERHASIL
+        // PERBAIKAN: TARIK PROFIT OTOMATIS SETELAH PEMBELIAN BERHASIL
         setTimeout(() => {
           tarikProfitSetelahBeli(kode, namaProduk);
         }, 1000);
